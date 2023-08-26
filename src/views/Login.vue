@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Autenticate } from "../stores/counter";
+import { useRouter } from 'vue-router'
+const route = useRouter()
 const Autent = Autenticate()
     let username = ref('')
     let password = ref('')
@@ -14,10 +16,11 @@ const Autent = Autenticate()
             responsebody = await response.json()
             Autent.token = responsebody.token
             console.log(Autent.token);
+            route.push('/')
             
             
-        } else {
-            console.log(response.status);
+        } else if(response.status ==404){
+            alert('there is no such user')
             
         }
         
@@ -36,6 +39,7 @@ const Autent = Autenticate()
         <input type="text" placeholder="password" v-model="password">
         <br>
         <button @click="login">Login</button>
+        
     </div>
 
 </template>

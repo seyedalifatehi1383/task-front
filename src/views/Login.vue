@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-
+import { Autenticate } from "../stores/counter";
+const Autent = Autenticate()
     let username = ref('')
     let password = ref('')
     let email = ref('')
     let responsebody : any
-    let token : any
     async function login() {
       const response = await fetch('http://localhost:3000/users/login',{headers : {"Content-Type": "application/json" } ,
          method :"POST" ,
          body : JSON.stringify({username : username.value , email : email.value , password:password.value }) })
         if (response.status ==200) {
             responsebody = await response.json()
-            token = responsebody.token
-            console.log(token);
+            Autent.token = responsebody.token
+            console.log(Autent.token);
             
             
         } else {

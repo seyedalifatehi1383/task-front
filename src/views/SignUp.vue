@@ -14,11 +14,13 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { ShowLoginMessageModal } from '../components/ShowLoginMessageModal.vue'
 
     let username = ref('')
     let password = ref('')
     let email = ref('')
-    let responsebody : any
+    // let showModal : boolean = ref(false)
+    // let responsebody : any
 
     async function signup() {
         const response = await fetch('http://localhost:3000/signup', {
@@ -32,8 +34,9 @@ import { ref } from 'vue';
         })
         
         if (response.status == 200) {
-            responsebody = await response.json()   
-
+            // responsebody = await response.json()
+            console.log('successfully signed in!');
+            ShowLoginMessageModal.toggleModal();
         } else {
             console.log(response);
         }

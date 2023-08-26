@@ -2,21 +2,35 @@
 import { onMounted, ref } from 'vue';
 import { Autenticate } from "../stores/counter";
 const Autent = Autenticate()
-let restualt :any
 let tasks = ref([])
 
 onMounted(async () => {
-     restualt = await fetch('http://localhost:3000/myTasks' , {headers : {'Authorization' : 'Bearer ' + Autent.token }})
-     
+     const restualt = await fetch('http://localhost:3000/myTasks' , {headers : {'Authorization' : 'Bearer ' + Autent.token }});
+     if (restualt.status == 200) {
+        tasks.value = await restualt.json()
+     } else {
+        alert('cant fetch')
+     }
      
   });
 </script>
 
 <template>
-<h1>{{ restualt }}</h1>
+<div class="Back">
+    <div class="panel" v-for="task in tasks">
+        <h1>titile :{{ task.title }}</h1>
+        <p> description :{{ task.desc }}</p>
+        
+    </div>
+</div>
 
 </template>
 
-<style>
-
+<style scoped>
+ .panel{
+    background: linear-gradient(109.6deg, rgb(128, 144, 233) 17.4%, rgb(171, 88, 238) 52.4%, rgb(255, 129, 246) 91%);
+    border-radius: 10px;
+    margin: 10px;
+    padding: 10px;
+ }
 </style>

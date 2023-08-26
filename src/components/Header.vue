@@ -5,10 +5,13 @@
 <template>
 <div class="Header">
     <h2>Task Manager</h2>
-    <button style="left: 85%;">signup</button>
+    
+    <RouterLink to="/SignUp">
+        <button style="left: 85%;">signup</button>
+    </RouterLink>
+
     <RouterLink to="/Login">
         <button style="left: 90%;">login</button>
-
     </RouterLink>
 </div>
 

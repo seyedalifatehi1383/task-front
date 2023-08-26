@@ -4,14 +4,20 @@ import { ref } from 'vue';
     let username = ref('')
     let password = ref('')
     let email = ref('')
+    let responsebody : any
+    let token : any
     async function login() {
       const response = await fetch('http://localhost:3000/users/login',{headers : {"Content-Type": "application/json" } ,
          method :"POST" ,
          body : JSON.stringify({username : username.value , email : email.value , password:password.value }) })
         if (response.status ==200) {
-            console.log(response.json());
+            responsebody = await response.json()
+            token = responsebody.token
+            console.log(token);
+            
             
         } else {
+            console.log(response.status);
             
         }
         

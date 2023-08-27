@@ -1,50 +1,53 @@
-
 <template>
     <div class="signUpForm">
-        <h1>SignUp</h1>
-        <input type="text" placeholder="username" v-model="username">
-        <br>
-        <input type="text" placeholder="email" v-model="email">
-        <br>
-        <input type="text" placeholder="password" v-model="password">
-        <br>
-        <button @click="signup">SignUp</button>
+      <h1> SignUp </h1>
+      <input type="text" placeholder="username" v-model="username" />
+      <br />
+      <input type="text" placeholder="email" v-model="email" />
+      <br />
+      <input type="text" placeholder="password" v-model="password" />
+      <br />
+      <button @click="signup">Sign Up</button>
     </div>
-</template>
 
-<script setup lang="ts">
-import { ref } from 'vue';
-import { ShowLoginMessageModal } from '../components/ShowLoginMessageModal.vue'
-
-    let username = ref('')
-    let password = ref('')
-    let email = ref('')
-    // let showModal : boolean = ref(false)
-    // let responsebody : any
-
-    async function signup() {
-        const response = await fetch('http://localhost:3000/signup', {
-            headers : {"Content-Type": "application/json" } ,
-            method :"POST" ,
-            body : JSON.stringify({
-                username : username.value,
-                email : email.value,
-                password: password.value
-            }) 
-        })
-        
-        if (response.status == 200) {
-            // responsebody = await response.json()
-            console.log('successfully signed in!');
-            ShowLoginMessageModal.toggleModal();
-        } else {
-            console.log(response);
-        }
+    <ShowLoginMessageModal v-if="showModal" @close-modal="closeModal" />
+  </template>
+  
+  <script setup lang="ts">
+  import { ref } from 'vue';
+  import ShowLoginMessageModal from '../components/ShowLoginMessageModal.vue';
+  
+  let username = ref('');
+  let password = ref('');
+  let email = ref('');
+  let showModal = ref(false);
+  
+  async function signup() {
+    const response = await fetch('http://localhost:3000/signup', {
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
+      body: JSON.stringify({
+        username: username.value,
+        email: email.value,
+        password: password.value
+      })
+    });
+  
+    if (response.status == 200) {
+      console.log('successfully signed in!');
+      showModal.value = true; // Set the showModal variable to true to show the modal
+    } else {
+      console.log(response);
     }
-</script>
+  }
+  
+  function closeModal() {
+    showModal.value = false; // Set the showModal variable to false to hide the modal
+  }
+  </script>
 
 <style scoped>
-    .signUpForm{
+    .signUpForm {
         position: relative;
         /* left: 30%; */
         border: 2px solid rgb(171, 88, 238);
@@ -54,14 +57,14 @@ import { ShowLoginMessageModal } from '../components/ShowLoginMessageModal.vue'
         margin: 10% 35%;
     }
 
-    .signUpForm input{
+    .signUpForm input {
         border-top: none;
         border-left: none;
         border-right: none;
         margin: 10px;
     }
 
-    .signUpForm button{
+    .signUpForm button {
         border: none;
         width: 128px;
         border-radius: 5px;

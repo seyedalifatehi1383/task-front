@@ -3,6 +3,7 @@ import DefualtHome from '@/components/DefualtHome.vue';
 import UserHome from '@/components/UserHome.vue';
 import DashboardUser from '../components/DashboardUser.vue'
 import { Autenticate } from "../stores/counter";
+import SubAdminDashboard from '@/components/SubAdminDashboard.vue';
 
 const Autent = Autenticate()
 
@@ -13,7 +14,8 @@ const Autent = Autenticate()
     <div v-else>
       
     </div> -->
-    <DashboardUser/>
+    <SubAdminDashboard />
+    
 </template>
 
 <style scoped>

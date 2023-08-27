@@ -59,7 +59,10 @@
 
             <h2> Manage users tasks </h2>
             <p> you can manage users tasks here </p>
-            <button class="see-button"> see </button>
+
+            <RouterLink to="/ManageUsers">
+                <button class="see-button"> see </button>
+            </RouterLink>
         </div>
 
         <div class="panel">

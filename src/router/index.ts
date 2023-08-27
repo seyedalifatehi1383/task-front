@@ -6,6 +6,8 @@ import AllTask from '../views/AllTask.vue'
 import FinishedTask from '../views/FinishedTask.vue'
 import UnfinishedTask from '../views/UnfinishedTask.vue'
 import ChatPage from '../views/ChatPage.vue'
+import ManageUsers from '../views/ManageUsers.vue'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -51,9 +53,11 @@ const router = createRouter({
       component: ChatPage
     },
 
-
-    
-    
+    {
+      path: '/ManageUsers',
+      name: 'ManageUsers',
+      component: ManageUsers
+    },
   ]
 })
 

@@ -14,7 +14,7 @@ const Autent = Autenticate()
     <div v-else>
       
     </div> -->
-    <SubAdminDashboard />
+    <DashboardUser />
     
 </template>
 

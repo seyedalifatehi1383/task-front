@@ -23,7 +23,9 @@
             </svg>
             <h1>Finished task</h1>
             <p>you can see all task that you finish it</p>
-            <button>see</button>
+            <RouterLink to="/FinishedTask">
+                <button>see</button>
+            </RouterLink>
         </div>
 
         <div class="panel">
@@ -32,7 +34,9 @@
             </svg>
             <h1>Unfinished task</h1>
             <p>you can see all task that is not finish</p>
-            <button>see</button>
+            <RouterLink to="/UnfinishedTask">
+                <button>see</button>
+            </RouterLink>
         </div>
 
         <div class="panel">

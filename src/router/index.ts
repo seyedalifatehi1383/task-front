@@ -5,6 +5,7 @@ import SignUp from '../views/SignUp.vue'
 import AllTask from '../views/AllTask.vue'
 import FinishedTask from '../views/FinishedTask.vue'
 import UnfinishedTask from '../views/UnfinishedTask.vue'
+import ChatPage from '../views/ChatPage.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -44,6 +45,11 @@ const router = createRouter({
       component: UnfinishedTask
     },
 
+    {
+      path: '/ChatPage',
+      name: 'ChatPage',
+      component: ChatPage
+    },
 
 
     

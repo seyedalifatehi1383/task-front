@@ -45,7 +45,9 @@
             </svg>
             <h1>global chat</h1>
             <p>you can see all task that you finish it</p>
-            <button>see</button>
+            <RouterLink to="/ChatPage">
+                <button>see</button>
+            </RouterLink>
         </div>
 
         

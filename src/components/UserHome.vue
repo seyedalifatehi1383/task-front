@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { Autenticate } from "../stores/counter";
 const Autent = Autenticate()
 let tasks = ref([])
@@ -7,7 +7,7 @@ let tasks = ref([])
 onMounted(async () => {
      const restualt = await fetch('http://localhost:3000/myTasks' , {headers : {'Authorization' : 'Bearer ' + Autent.token }});
      if (restualt.status == 200) {
-        tasks.value = await restualt.json()
+        tasks = await restualt.json()
      } else {
         console.log(restualt);
         
@@ -21,7 +21,7 @@ onMounted(async () => {
 <div class="Back">
     <div class="panel" v-for="task in tasks">
         <h1>titile :{{ task.title }}</h1>
-        <p> description :{{ task.desc }}</p>
+        <p> description :{{ task.des }}</p>
         
     </div>
 </div>

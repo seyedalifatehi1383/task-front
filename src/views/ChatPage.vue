@@ -1,15 +1,77 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-const chats = ref([{name : '' , title : '' , text: '' , group : ''}])
+import { Autenticate } from "../stores/counter";
+const Autent = Autenticate()
+const Messages = ref([{name : '' , title : '' , text: '' , group : ''}])
+const WhoAmI = ref({username : ''})
 onMounted(async () =>{
-    const restualt = await fetch('http://localhost:3000/chats', { headers: { 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI0NmNiN2Q3LWYwZmQtNGUyMS04NDgwLWJjZWNkZDJiYzA5NSIsIm5hbWUiOiJzb21lb25lIiwiZW1haWwiOiJzb21lb25lQGdtYWlsLmNvbSIsImlhdCI6MTY5MzExNzAyMCwiZXhwIjoxNjkzMTM4NjIwfQ.BHxDtm8qvlx2tPnAfJK6Vd0yT8SFkf5KzYhI243CN3g' } })
-    chats.value = await restualt.json()
+    const restualt = await fetch('http://localhost:3000/chats', { headers: { 'Authorization': Autent.token } })
+    Messages.value = await restualt.json()
+
+    const Who = await fetch('http://localhost:3000/whoAmI', { headers: { 'Authorization': Autent.token } })
+    WhoAmI.value = await Who.json();
 })
 </script>
 
 <template>
     <div class="background">
-        <!-- <h1>{{ chats }}</h1> -->
+        <div class="MessageAll" v-for="Message in Messages">
+            <div class="MessageOther" v-if="WhoAmI.username !== Message.name">
+                <div class="name">
+                <p>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                    </svg>
+                    {{ Message.name }}
+                </p>
+            </div>
+
+            <div class="title">
+                <p >title : {{ Message.title }}</p>
+            </div>
+
+            <div class="text">
+                <p>Text :{{ Message.text }}</p>
+            </div>
+
+            <div class="group">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-collection-fill" viewBox="0 0 16 16">
+                <path d="M0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6v7zM2 3a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 0-1h-11A.5.5 0 0 0 2 3zm2-2a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7A.5.5 0 0 0 4 1z"/>
+                </svg>
+                {{ Message.group }}
+            </div>
+            </div>
+
+            <div class="MessageMe" v-else>
+                <div class="name">
+                <p>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                    </svg>
+                    {{ Message.name }}
+                </p>
+            </div>
+
+            <div class="title">
+                <p >title : {{ Message.title }}</p>
+            </div>
+
+            <div class="text">
+                <p>Text :{{ Message.text }}</p>
+            </div>
+
+            <div class="group">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-collection-fill" viewBox="0 0 16 16">
+                <path d="M0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6v7zM2 3a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 0-1h-11A.5.5 0 0 0 2 3zm2-2a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7A.5.5 0 0 0 4 1z"/>
+                </svg>
+                {{ Message.group }}
+            </div>
+            
+            </div>
+                
+        </div>
+
+        
     </div>
     <div class="writeMessage">
         <input type="">
@@ -23,38 +85,56 @@ onMounted(async () =>{
 </template>
 
 <style scoped>
-    .background{
-        margin: 10px;
-        border: 5px double rgb(171, 88, 238, 0.7);
+    .MessageOther{
+        margin: 10px ;
+        border-radius: 10px;
+        /* background-color: rgb(128, 144, 233, 0.7); */
+        background-color: #B200ED;
+        padding: 3px 15px;
+        width: 350px;
+        color: white;
+        /* float: right; */
     }
 
-    .writeMessage{
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(1300px, 2fr));
-
-        margin: 10px;
-        position: relative;
-        /* background-color: aqua; */
-        padding: 10px;
+    .MessageMe{
+        margin: 10px ;
+        border-radius: 10px;
+        /* background-color: rgb(128, 144, 233, 0.7); */
+        background-color: rgb(255, 129, 246, 0.7);
+        padding: 3px 15px;
+        width: 350px;
+        color: white;
+        
+        direction: rtl;
+        
     }
 
     .writeMessage input{
+        /* margin: 0px 10px; */
+        /* min-width: 500px; */
         width: 1500px;
-        height: 42px;
-        margin-right: 20px;
-        border-radius: 10px;
-        /* background-color: rgb(161, 161, 161 , 0.5); */
-        border: 2px solid  rgb(255, 129, 246, 0.7);
-        /* color: white; */
-        font-size: larger;
     }
 
     .writeMessage button{
-        background: linear-gradient(109.6deg, rgb(128, 144, 233, 0.7) 17.4%, rgb(171, 88, 238, 0.7) 52.4%, rgb(255, 129, 246, 0.7) 91%);
-        border: none;        
-        border-radius: 15px;
-        width: 128px;
-        align-items: center;
-        padding: 5px;
+        /* max-width: 128px; */
+        /* min-width: 100px; */
     }
+
+    .writeMessage{
+        margin: 10px;
+        display: flex;
+        /* grid-template-columns: repeat(auto-fit, minmax(256px, 1fr)); */
+    
+    }
+
+    .background{
+        
+        overflow-y: scroll;
+        /* position: absolute;*/
+        height: 512px; 
+        /* overflow-x: hidden; */
+        
+    }
+
+    
 </style>

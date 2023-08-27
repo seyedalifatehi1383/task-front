@@ -5,15 +5,13 @@ const Autent = Autenticate()
 let tasks = ref([])
 
 onMounted(async () => {
-     const restualt = await fetch('http://localhost:3000/myTasks' , {headers : {'Authorization' : 'Bearer ' + Autent.getchatch() }});
+     const restualt = await fetch('http://localhost:3000/myTasks' , {headers : {'Authorization' : 'Bearer ' + Autent.token }});
      if (restualt.status == 200) {
         tasks.value = await restualt.json()
      } else {
         console.log(restualt);
         
      }
-
-    console.log(Autent.getchatch());
     
      
   });

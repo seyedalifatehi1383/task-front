@@ -8,7 +8,7 @@ const Autent = Autenticate()
 </script>
 
 <template>
-    <DefualtHome v-if="Autent.getchatch == null"/>
+    <DefualtHome v-if="Autent.token == ''"/>
     <div v-else>
       <UserHome/>
     </div>

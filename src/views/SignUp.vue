@@ -10,17 +10,17 @@
       <button @click="signup">Sign Up</button>
     </div>
 
-    <ShowLoginMessageModal v-if="showModal" @close-modal="closeModal" />
+    <ShowSignUpMessageModal v-if="showSignUpModal" @close-modal="closeModal" />
   </template>
   
   <script setup lang="ts">
   import { ref } from 'vue';
-  import ShowLoginMessageModal from '../components/ShowLoginMessageModal.vue';
+  import ShowSignUpMessageModal from '../components/ShowSignUpMessageModal.vue';
   
   let username = ref('');
   let password = ref('');
   let email = ref('');
-  let showModal = ref(false);
+  let showSignUpModal = ref(false);
   
   async function signup() {
     const response = await fetch('http://localhost:3000/signup', {
@@ -35,14 +35,15 @@
   
     if (response.status == 200) {
       console.log('successfully signed in!');
-      showModal.value = true; // Set the showModal variable to true to show the modal
+      showSignUpModal.value = true; // Set the showModal variable to true to show the modal
     } else {
+      
       console.log(response);
     }
   }
   
   function closeModal() {
-    showModal.value = false; // Set the showModal variable to false to hide the modal
+    showSignUpModal.value = false; // Set the showModal variable to false to hide the modal
   }
   </script>
 

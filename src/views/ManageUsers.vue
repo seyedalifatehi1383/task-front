@@ -13,6 +13,14 @@
 
                 </div> -->
 
+                <div class="addTask" title="add task for user" @click="">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor"
+                        class="bi bi-file-earmark-plus-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0zM9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1zM8.5 7v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 1 0z" />
+                    </svg>
+                </div>
+
                 <div class="showUserTasks" @click="user.showTasks = !user.showTasks" title="user tasks list">
                     <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor"
                         class="bi bi-list-task" viewBox="0 0 16 16">
@@ -22,14 +30,6 @@
                             d="M5 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM5.5 7a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 4a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9z" />
                         <path fill-rule="evenodd"
                             d="M1.5 7a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5V7zM2 7h1v1H2V7zm0 3.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5H2zm1 .5H2v1h1v-1z" />
-                    </svg>
-                </div>
-
-                <div class="addTask" title="">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor"
-                        class="bi bi-file-earmark-plus-fill" viewBox="0 0 16 16">
-                        <path
-                            d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0zM9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1zM8.5 7v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 1 0z" />
                     </svg>
                 </div>
             </div>
@@ -98,6 +98,10 @@ function callGetTasks(userId: string, index: number) {
         right: 0px;
 } */
 
+.showUserTasks svg {
+    cursor: pointer;
+}
+
 .seeTasks details summary {
     font-size: 25px;
     cursor: pointer;
@@ -105,4 +109,9 @@ function callGetTasks(userId: string, index: number) {
 
 .seeTasks details blockquote {
     font-size: 20px;
-}</style>
+}
+
+.addTask svg {
+    cursor: pointer;
+}
+</style>

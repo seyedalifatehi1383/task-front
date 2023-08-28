@@ -30,7 +30,8 @@ const Autent = Autenticate()
 </script>
 
 <template>
-    <div class="loginForm">
+    <div class="backgroand">
+        <div class="loginForm">
         <h1>Login</h1>
         <input type="text" placeholder="username" v-model="username">
         <br>
@@ -41,19 +42,32 @@ const Autent = Autenticate()
         <button @click="login">Login</button>
         
     </div>
+    </div>
 
 </template>
 
 <style scoped>
+
+    .backgroand{
+        /* display: flex; */
+        display: flex;
+        justify-content: center;
+    }
+
     .loginForm{
         position: relative;
         /* left: 30%; */
         border: 2px solid rgb(171, 88, 238);
         border-radius: 10px;
-        /* max-width: 1500px; */
+        max-width: 800px;
+        width: 500px;
+        min-width: 100px;
+        /* width: 1000px; */
         text-align: center;
-        margin: 10% 25%;
+        /* margin: 10% 35%; */
+        margin: 10px;
         height: 400px;
+        
     
     }
 

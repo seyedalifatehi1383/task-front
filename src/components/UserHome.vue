@@ -3,9 +3,10 @@ import { onMounted, reactive, ref } from 'vue';
 import { Autenticate } from "../stores/counter";
 const Autent = Autenticate()
 let tasks = ref([])
+const token = localStorage.getItem("TOKEN")
 
 onMounted(async () => {
-     const restualt = await fetch('http://localhost:3000/myTasks' , {headers : {'Authorization' : 'Bearer ' + Autent.token }});
+     const restualt = await fetch('http://localhost:3000/myTasks' , {headers : {'Authorization' : token!}});
      if (restualt.status == 200) {
         tasks = await restualt.json()
      } else {

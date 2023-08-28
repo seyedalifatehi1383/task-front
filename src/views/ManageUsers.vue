@@ -47,10 +47,10 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-
+const token = localStorage.getItem("TOKEN")
 let users = ref([{ id: '', username: '', email: '', showTasks: false }])
 onMounted(async () => {
-    const resaultUsers = await fetch('http://localhost:3000/showUsers', { headers: { 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFjY2FlNTVhLTdkNzktNDRlYy1hZjI4LTIyYjU2MjdlM2EwOSIsIm5hbWUiOiJzYWZhdGVoaSIsImVtYWlsIjoiYWZhdGVoaTA3QGdtYWlsLmNvbSIsImlhdCI6MTY5MzE5ODI2OCwiZXhwIjoxNjkzMjE5ODY4fQ.aTU8hma4VyPBLQloBuj74pt4MZU5d0p1bOKkmcbVjsQ' } })
+    const resaultUsers = await fetch('http://localhost:3000/showUsers', { headers: { 'Authorization': token! } })
     users.value = await resaultUsers.json()
 
     for (let i = 0; i < users.value.length; i++) {
@@ -61,7 +61,7 @@ onMounted(async () => {
 
 let allTasks = ref([[{ title: '', desc: '', isfinish: false }]])
 async function getTasks(userId: string, index: number) {
-    const resaultTasks = await fetch('http://localhost:3000/subAdmin/' + userId + '/task', { headers: { 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFjY2FlNTVhLTdkNzktNDRlYy1hZjI4LTIyYjU2MjdlM2EwOSIsIm5hbWUiOiJzYWZhdGVoaSIsImVtYWlsIjoiYWZhdGVoaTA3QGdtYWlsLmNvbSIsImlhdCI6MTY5MzE5ODI2OCwiZXhwIjoxNjkzMjE5ODY4fQ.aTU8hma4VyPBLQloBuj74pt4MZU5d0p1bOKkmcbVjsQ' } })
+    const resaultTasks = await fetch('http://localhost:3000/subAdmin/' + userId + '/task', { headers: { 'Authorization': token! } })
     allTasks.value[index] = await resaultTasks.json()
 }
 

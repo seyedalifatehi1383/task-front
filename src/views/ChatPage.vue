@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 import { Autenticate } from "../stores/counter";
 const Autent = Autenticate()
-const Messages = ref([{name : '' , title : '' , text: '' , group : ''}])
+const Messages = ref([{name : '' , title : '' , text: '' , group : '' , id:0}])
 const WhoAmI = ref({username : '' , accessLevel : ''})
 let Text = ref('')
 let Title = ref('')
@@ -36,6 +36,17 @@ async function SENDMessage() {
     Group.value = ''
 }
 
+async function DeleteMessage(id : number) {
+    const deleteResualt = await fetch('http://localhost:3000/new-users/chats/'+id, { 
+        method : 'DELETE',
+        headers: { "Content-Type": "application/json" , 'Authorization': token! },
+        })
+    if (deleteResualt.status !== 200) {
+        alert('Message dont deleted the error code is :' + deleteResualt.status)
+    }
+    
+}
+
 
 </script>
 
@@ -65,6 +76,12 @@ async function SENDMessage() {
                 <path d="M0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6v7zM2 3a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 0-1h-11A.5.5 0 0 0 2 3zm2-2a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7A.5.5 0 0 0 4 1z"/>
                 </svg>
                 {{ Message.group }}
+            </div>
+
+            <div class="deleteMessage" v-if="WhoAmI.accessLevel == 'Admin'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                </svg>
             </div>
             </div>
 
@@ -96,6 +113,21 @@ async function SENDMessage() {
                 {{ Message.group }}
             </div>
             
+            <div class="edit-Delete-Message">
+
+
+                <svg @click="console.log('edit')" style="margin-left: 10px; cursor: pointer;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                </svg>
+
+                <svg @click="DeleteMessage(Message.id)" style="cursor: pointer;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                </svg>
+                
+
+            </div>
+
             </div>
 
             </div>
@@ -177,6 +209,19 @@ async function SENDMessage() {
         /* overflow-x: hidden; */
         width: 100%;
         
+    }
+
+
+    .edit-Delete-Message{
+        display: none;
+        
+    }
+
+    .MessageMe:hover{
+        .edit-Delete-Message{
+            display: flex;
+            margin: 10px 0px;
+        }
     }
 
     ::-webkit-scrollbar {

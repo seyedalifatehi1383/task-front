@@ -13,7 +13,7 @@
 
                 </div> -->
 
-                <div class="addTask" title="add task for user" @click="">
+                <div class="addTask" title="add task for user">
                     <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor"
                         class="bi bi-file-earmark-plus-fill" viewBox="0 0 16 16">
                         <path

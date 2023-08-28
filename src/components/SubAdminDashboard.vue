@@ -74,9 +74,10 @@
             <h2> Global chat </h2>
             <p> you can see global chat here </p>
 
-            <button class="see-button"> see </button>
+            <RouterLink to="/ChatPage">
+                <button class="see-button"> see </button>
+            </RouterLink>
         </div>
-
     </div>
 </template>
 
@@ -128,4 +129,5 @@
     scale: 120%;
     transition: 0.8s;
     cursor: pointer;
-}</style>
+}
+</style>

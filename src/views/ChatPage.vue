@@ -3,14 +3,40 @@ import { onMounted, ref } from 'vue';
 import { Autenticate } from "../stores/counter";
 const Autent = Autenticate()
 const Messages = ref([{name : '' , title : '' , text: '' , group : ''}])
-const WhoAmI = ref({username : ''})
+const WhoAmI = ref({username : '' , accessLevel : ''})
+let Text = ref('')
+let Title = ref('')
+let Group = ref('')
+let sendresualt = ref('')
+const token = localStorage.getItem("TOKEN")
 onMounted(async () =>{
-    const restualt = await fetch('http://localhost:3000/chats', { headers: { 'Authorization': Autent.token } })
+    const restualt = await fetch('http://localhost:3000/chats', { headers: { 'Authorization': token! } })
     Messages.value = await restualt.json()
 
     const Who = await fetch('http://localhost:3000/whoAmI', { headers: { 'Authorization': Autent.token } })
     WhoAmI.value = await Who.json();
+    
 })
+
+window.setInterval(async () => {
+    const restualt = await fetch('http://localhost:3000/chats', { headers: { 'Authorization': token! } })
+    Messages.value = await restualt.json()
+            
+},1000);
+
+async function SENDMessage() {
+    const sendMessage = await fetch('http://localhost:3000/new-users/chats', { 
+        method : 'POST',
+        headers: { "Content-Type": "application/json" , 'Authorization': Autent.token },
+        body : JSON.stringify({title : Title.value , text : Text.value , group : Group.value})
+    })
+    console.log(sendMessage);
+    Text.value = ''
+    Title.value = ''
+    Group.value = ''
+}
+
+
 </script>
 
 <template>
@@ -42,13 +68,16 @@ onMounted(async () =>{
             </div>
             </div>
 
-            <div class="MessageMe" v-else>
+            
+
+                <div class="MessageMe" v-else>
                 <div class="name">
                 <p>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
                     <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
                     </svg>
                     {{ Message.name }}
+                    ({{ WhoAmI.accessLevel }})
                 </p>
             </div>
 
@@ -68,19 +97,19 @@ onMounted(async () =>{
             </div>
             
             </div>
+
+            </div>
                 
-        </div>
+        
 
         
     </div>
     <div class="writeMessage">
-        <input type="">
-        <button>
-            <!-- <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-send-fill" viewBox="0 0 16 16">
-            <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"/>
-            </svg> -->
-            SEND MESSAGE
-        </button>
+        <input type="text" placeholder="TITLE" v-model="Title">
+        <input type="text" placeholder="TEXT" v-model="Text">
+        <input type="text" placeholder="GROUP" v-model="Group">
+
+        <button @click="SENDMessage" >SEND MESSAGE</button>
     </div>
 </template>
 
@@ -104,36 +133,54 @@ onMounted(async () =>{
         padding: 3px 15px;
         width: 350px;
         color: white;
-        
+        /* margin-left: 80%; */
+        position: relative;
+        left: 79%;
         direction: rtl;
         
     }
 
     .writeMessage input{
-        /* margin: 0px 10px; */
+        margin: 10px;
         /* min-width: 500px; */
-        width: 1500px;
+        height: 32px;
+        border: 2px solid ;
+        border-image: linear-gradient(109.6deg, rgb(128, 144, 233) 17.4%, rgb(171, 88, 238) 52.4%, rgb(255, 129, 246) 91%) 1;
+
     }
 
     .writeMessage button{
         /* max-width: 128px; */
         /* min-width: 100px; */
+        margin: 10px;
+        background: none;
+        border: 2px solid;
+        /* max-width: 256px; */
+        /* border-image: linear-gradient(109.6deg, rgb(128, 144, 233) 17.4%, rgb(171, 88, 238) 52.4%, rgb(255, 129, 246) 91%) 1; */
+        background: linear-gradient(109.6deg, rgb(128, 144, 233) 17.4%, rgb(171, 88, 238) 52.4%, rgb(255, 129, 246) 91%);
+        color: #ffffff;
     }
 
     .writeMessage{
-        margin: 10px;
-        display: flex;
-        /* grid-template-columns: repeat(auto-fit, minmax(256px, 1fr)); */
+        /* margin: 10px; */
+        display: grid;
+        /* position: fixed; */
+        grid-template-columns: repeat(auto-fit, minmax(256px, 2fr));
     
     }
 
     .background{
-        
+    
         overflow-y: scroll;
         /* position: absolute;*/
-        height: 512px; 
+        height: 780px; 
         /* overflow-x: hidden; */
+        width: 100%;
         
+    }
+
+    ::-webkit-scrollbar {
+     width: 20px;
     }
 
     

@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+import { Autenticate } from "../stores/counter";
+const Autent = Autenticate()
+
 let tasks = ref([{ title: '', desc: '', isfinish: false, more: false }])
 onMounted(async () => {
-    const restualt = await fetch('http://localhost:3000//new-users/myFinished', { headers: { 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI0NmNiN2Q3LWYwZmQtNGUyMS04NDgwLWJjZWNkZDJiYzA5NSIsIm5hbWUiOiJzb21lb25lIiwiZW1haWwiOiJzb21lb25lQGdtYWlsLmNvbSIsImlhdCI6MTY5MzExNzAyMCwiZXhwIjoxNjkzMTM4NjIwfQ.BHxDtm8qvlx2tPnAfJK6Vd0yT8SFkf5KzYhI243CN3g' } })
+    const restualt = await fetch('http://localhost:3000//new-users/myFinished', { headers: { 'Authorization': Autent.token } })
     tasks.value = await restualt.json()
 })
 

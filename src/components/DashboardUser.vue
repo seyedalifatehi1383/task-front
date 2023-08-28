@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import { Autenticate } from "../stores/counter";
+const Autent = Autenticate()
+// Autent.GetToken()
+const prop = "test4"
+// localStorage.setItem("TOKEN" , JSON.stringify())
+
 
 </script>
 

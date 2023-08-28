@@ -14,10 +14,9 @@ const Autent = Autenticate()
          body : JSON.stringify({username : username.value , email : email.value , password:password.value }) })
         if (response.status ==200) {
             responsebody = await response.json()
-            Autent.token = 'Bearer ' +responsebody.token
             localStorage.setItem("TOKEN" , 'Bearer '+responsebody.token)
-            console.log(Autent.token);
             route.push('/')
+            
             
             
         } else if(response.status ==404){

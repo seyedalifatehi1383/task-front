@@ -4,9 +4,22 @@ import UserHome from '@/components/UserHome.vue';
 import DashboardUser from '../components/DashboardUser.vue'
 import { Autenticate } from "../stores/counter";
 import SubAdminDashboard from '@/components/SubAdminDashboard.vue';
+import { onMounted, ref } from 'vue';
 
 const Autent = Autenticate()
+const token = ref(localStorage.getItem("TOKEN"))
+const WhoAmI = ref({username : '' , accessLevel : ''})
 
+onMounted(async () =>{
+    const Who = await fetch('http://localhost:3000/whoAmI', { headers: { 'Authorization': token.value! } })
+    if (Who.status == 401) {
+        localStorage.clear()
+    } else {
+        WhoAmI.value = await Who.json();
+        
+    }
+})
+// localStorage.clear()
 </script>
 
 <template>
@@ -15,7 +28,18 @@ const Autent = Autenticate()
       
     </div> -->
     <!-- <SubAdminDashboard /> -->
-    <DashboardUser />
+    <div v-if="token == undefined">
+        <DefualtHome/>
+    </div>
+    <div v-else>
+        <div v-if="WhoAmI.accessLevel == 'User'">
+            <DashboardUser/>
+        </div>
+        <div v-if="WhoAmI.accessLevel == 'SubAdmin'">
+            <SubAdminDashboard/>
+        </div>
+    </div>
+    <!-- <DashboardUser /> -->
     
 </template>
 

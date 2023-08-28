@@ -13,7 +13,7 @@ onMounted(async () =>{
     const restualt = await fetch('http://localhost:3000/chats', { headers: { 'Authorization': token! } })
     Messages.value = await restualt.json()
 
-    const Who = await fetch('http://localhost:3000/whoAmI', { headers: { 'Authorization': Autent.token } })
+    const Who = await fetch('http://localhost:3000/whoAmI', { headers: { 'Authorization': token! } })
     WhoAmI.value = await Who.json();
     
 })
@@ -27,7 +27,7 @@ window.setInterval(async () => {
 async function SENDMessage() {
     const sendMessage = await fetch('http://localhost:3000/new-users/chats', { 
         method : 'POST',
-        headers: { "Content-Type": "application/json" , 'Authorization': Autent.token },
+        headers: { "Content-Type": "application/json" , 'Authorization': token! },
         body : JSON.stringify({title : Title.value , text : Text.value , group : Group.value})
     })
     console.log(sendMessage);

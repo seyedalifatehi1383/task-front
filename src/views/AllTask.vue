@@ -2,10 +2,10 @@
 import { onMounted, ref } from 'vue';
 import { Autenticate } from "../stores/counter";
 const Autent = Autenticate()
-
+const token = ref(localStorage.getItem("TOKEN"))
 let tasks = ref([{ title: '', desc: '', isfinish: false, more: false }])
 onMounted(async () => {
-    const restualt = await fetch('http://localhost:3000/myTasks', { headers: { 'Authorization': Autent.token } })
+    const restualt = await fetch('http://localhost:3000/myTasks', { headers: { 'Authorization': token.value!  } })
     tasks.value = await restualt.json()
 })
 

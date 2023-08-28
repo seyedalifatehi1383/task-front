@@ -6,22 +6,26 @@
 
         <br><br>
 
-        <input type="text" id="Description" name="Description" placeholder="Description" required>
+        <textarea name="description" id="description" cols="30" rows="10" placeholder="Description" required></textarea>
+        <!-- <input type="text" id="Description" name="Description" placeholder="Description" required> -->
 
         <br><br>
 
-        <button> Add task </button>
+        <button style="cursor: pointer;" @click="addTask()"> Add task </button>
     </div>
 </template>
 
 <script setup lang="ts">
 const emit = defineEmits(['close-modal']);
 const prop = defineProps()
+
 function closeModal() {
     emit('close-modal'); // Emit the 'close-modal' event to the parent component
 }
 
-
+function addTask(userId : string) {
+    
+}
 </script>
 
 <style scoped>
@@ -70,6 +74,17 @@ input {
     border-right: none;
     border-left: none;
     border-bottom: 1px solid black;
+}
+
+textarea {
+    border-radius: 5px;
+    height: 50px;
+    width: 70%;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom: 1px solid black;
+    resize: vertical;   
 }
 
 button {

@@ -1,6 +1,6 @@
 <template>
     <div class="manage-container">
-        <div class="taskPanel" v-for="user in users">
+        <div class="taskPanel" v-for="(user, mainIndex) in users" :key="user.id">
             <div class="seeLess">
                 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-person-fill"
                     viewBox="0 0 16 16">
@@ -9,20 +9,37 @@
 
                 <h1>{{ user.username }}</h1>
 
-                <div class="status">
+                <!-- <div class="status">
 
+                </div> -->
+
+                <div class="showUserTasks" @click="user.showTasks = !user.showTasks" title="user tasks list">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor"
+                        class="bi bi-list-task" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M2 2.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5V3a.5.5 0 0 0-.5-.5H2zM3 3H2v1h1V3z" />
+                        <path
+                            d="M5 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM5.5 7a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 4a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9z" />
+                        <path fill-rule="evenodd"
+                            d="M1.5 7a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5V7zM2 7h1v1H2V7zm0 3.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5H2zm1 .5H2v1h1v-1z" />
+                    </svg>
                 </div>
 
-                <div class="more" @click="user.showTasks = !user.showTasks">
+                <div class="addTask" title="">
                     <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor"
-                        class="bi bi-three-dots" viewBox="0 0 16 16">
+                        class="bi bi-file-earmark-plus-fill" viewBox="0 0 16 16">
                         <path
-                            d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
+                            d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0zM9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1zM8.5 7v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 1 0z" />
                     </svg>
                 </div>
             </div>
-            <div class="seeMore">
-                <p v-if="user.showTasks" style="margin: 15px;">Description : {{ user.desc }}</p>
+
+            <div class="seeTasks" v-if="user.showTasks" style="margin: 15px;">
+                <details v-for="tasks in allTasks[mainIndex]">
+                    <summary @click:right="console.log('rast click')"> {{ tasks.title }} </summary>
+                    <blockquote> {{ tasks.desc }} </blockquote>
+                </details>
+                <!-- <li> {{ tasks.title }} </li> -->
             </div>
         </div>
     </div>
@@ -32,16 +49,24 @@
 import { onMounted, ref } from 'vue';
 
 let users = ref([{ id: '', username: '', email: '', showTasks: false }])
-
 onMounted(async () => {
-    const resualtUsers = await fetch('http://localhost:3000/showUsers', { headers: { 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFjY2FlNTVhLTdkNzktNDRlYy1hZjI4LTIyYjU2MjdlM2EwOSIsIm5hbWUiOiJzYWZhdGVoaSIsImVtYWlsIjoiYWZhdGVoaTA3QGdtYWlsLmNvbSIsImlhdCI6MTY5MzEyOTA0MiwiZXhwIjoxNjkzMTUwNjQyfQ.v_QIWAPGWK5FfrDvt_KjrcO6z_oCFVrLW6ha31Wl8DA' } })
-    users.value = await resualtUsers.json()
+    const resaultUsers = await fetch('http://localhost:3000/showUsers', { headers: { 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFjY2FlNTVhLTdkNzktNDRlYy1hZjI4LTIyYjU2MjdlM2EwOSIsIm5hbWUiOiJzYWZhdGVoaSIsImVtYWlsIjoiYWZhdGVoaTA3QGdtYWlsLmNvbSIsImlhdCI6MTY5MzE5ODI2OCwiZXhwIjoxNjkzMjE5ODY4fQ.aTU8hma4VyPBLQloBuj74pt4MZU5d0p1bOKkmcbVjsQ' } })
+    users.value = await resaultUsers.json()
+
+    for (let i = 0; i < users.value.length; i++) {
+        const userId = users.value[i].id;
+        callGetTasks(userId, i);
+    }
 })
 
-let tasks = ref([{ title: '', desc: '', isfinish: false }])
-async function getTasks(userId: string) {
-    const resualt = await fetch('http://localhost:3000/', { headers: { 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFjY2FlNTVhLTdkNzktNDRlYy1hZjI4LTIyYjU2MjdlM2EwOSIsIm5hbWUiOiJzYWZhdGVoaSIsImVtYWlsIjoiYWZhdGVoaTA3QGdtYWlsLmNvbSIsImlhdCI6MTY5MzEyOTA0MiwiZXhwIjoxNjkzMTUwNjQyfQ.v_QIWAPGWK5FfrDvt_KjrcO6z_oCFVrLW6ha31Wl8DA' } })
-    tasks.value = await resualt.json()
+let allTasks = ref([[{ title: '', desc: '', isfinish: false }]])
+async function getTasks(userId: string, index: number) {
+    const resaultTasks = await fetch('http://localhost:3000/subAdmin/' + userId + '/task', { headers: { 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFjY2FlNTVhLTdkNzktNDRlYy1hZjI4LTIyYjU2MjdlM2EwOSIsIm5hbWUiOiJzYWZhdGVoaSIsImVtYWlsIjoiYWZhdGVoaTA3QGdtYWlsLmNvbSIsImlhdCI6MTY5MzE5ODI2OCwiZXhwIjoxNjkzMjE5ODY4fQ.aTU8hma4VyPBLQloBuj74pt4MZU5d0p1bOKkmcbVjsQ' } })
+    allTasks.value[index] = await resaultTasks.json()
+}
+
+function callGetTasks(userId: string, index: number) {
+    getTasks(userId, index);
 }
 </script>
 
@@ -66,10 +91,18 @@ async function getTasks(userId: string) {
     margin: 10px 15px;
 }
 
-.status {
+/* .status {
     text-align: center;
     width: fit-content;
     /* position: absolute;
-        right: 0px; */
+        right: 0px;
+} */
+
+.seeTasks details summary {
+    font-size: 25px;
+    cursor: pointer;
 }
-</style>
+
+.seeTasks details blockquote {
+    font-size: 20px;
+}</style>

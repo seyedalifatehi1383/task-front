@@ -15,7 +15,7 @@
 
                 <div class="addTask" title="add task for user">
                     <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor"
-                        class="bi bi-file-earmark-plus-fill" viewBox="0 0 16 16">
+                        class="bi bi-file-earmark-plus-fill" viewBox="0 0 16 16" @click="showAddTaskModal = true">
                         <path
                             d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0zM9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1zM8.5 7v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 1 0z" />
                     </svg>
@@ -36,18 +36,23 @@
 
             <div class="seeTasks" v-if="user.showTasks" style="margin: 15px;">
                 <details v-for="tasks in allTasks[mainIndex]">
-                    <summary @click:right="console.log('rast click')"> {{ tasks.title }} </summary>
+                    <summary> {{ tasks.title }} </summary>
                     <blockquote> {{ tasks.desc }} </blockquote>
                 </details>
-                <!-- <li> {{ tasks.title }} </li> -->
             </div>
         </div>
     </div>
+
+    <AddTaskModal v-if="showAddTaskModal" @close-modal="closeModal" />
 </template>
 
 <script setup lang="ts">
+import AddTaskModal from '@/components/AddTaskModal.vue';
 import { onMounted, ref } from 'vue';
+
 const token = localStorage.getItem("TOKEN")
+let showAddTaskModal = ref(false)
+
 let users = ref([{ id: '', username: '', email: '', showTasks: false }])
 onMounted(async () => {
     const resaultUsers = await fetch('http://localhost:3000/showUsers', { headers: { 'Authorization': token! } })
@@ -67,6 +72,10 @@ async function getTasks(userId: string, index: number) {
 
 function callGetTasks(userId: string, index: number) {
     getTasks(userId, index);
+}
+
+function closeModal() {
+    showAddTaskModal.value = !showAddTaskModal.value
 }
 </script>
 

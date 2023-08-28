@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { Autenticate } from "../stores/counter";
+import Messagemodal from '../components/EditMessage.vue'
+
 const Autent = Autenticate()
 const Messages = ref([{name : '' , title : '' , text: '' , group : '' , id:0}])
 const WhoAmI = ref({username : '' , accessLevel : ''})
@@ -9,6 +11,8 @@ let Title = ref('')
 let Group = ref('')
 let sendresualt = ref('')
 const token = localStorage.getItem("TOKEN")
+let editDefualt = ref({title : '' , text : '' , group :''})
+let checkClickEdit = false
 onMounted(async () =>{
     const restualt = await fetch('http://localhost:3000/chats', { headers: { 'Authorization': token! } })
     Messages.value = await restualt.json()
@@ -22,7 +26,7 @@ window.setInterval(async () => {
     const restualt = await fetch('http://localhost:3000/chats', { headers: { 'Authorization': token! } })
     Messages.value = await restualt.json()
             
-},1000);
+},100);
 
 async function SENDMessage() {
     const sendMessage = await fetch('http://localhost:3000/new-users/chats', { 
@@ -47,8 +51,12 @@ async function DeleteMessage(id : number) {
     
 }
 
-function EditMessage(id : number) {
-    console.log(id);
+function EditMessage(title : string , text : string ,group : string, id : number) {
+    checkClickEdit = true
+    editDefualt.value.title = title
+    editDefualt.value.text = text
+    editDefualt.value.group = group
+    
     
 }
 
@@ -56,6 +64,7 @@ function EditMessage(id : number) {
 </script>
 
 <template>
+    <Messagemodal @close-modal="checkClickEdit = false" v-if="checkClickEdit" :group="editDefualt.group" :title="editDefualt.title" :text="editDefualt.text"/>
     <div class="background">
         <div class="MessageAll" v-for="Message in Messages">
             <div class="MessageOther" v-if="WhoAmI.username !== Message.name">
@@ -121,7 +130,7 @@ function EditMessage(id : number) {
             <div class="edit-Delete-Message">
 
 
-                <svg @click="EditMessage(Message.id)" style="margin-left: 10px; cursor: pointer;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                <svg @click="EditMessage(Message.title , Message.text , Message.group , Message.id)" style="margin-left: 10px; cursor: pointer;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                 <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                 </svg>

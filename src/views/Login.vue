@@ -50,24 +50,27 @@ const Autent = Autenticate()
         /* left: 30%; */
         border: 2px solid rgb(171, 88, 238);
         border-radius: 10px;
-        width: 25%;
+        /* max-width: 1500px; */
         text-align: center;
-        margin: 10% 35%;
+        margin: 10% 25%;
+        height: 400px;
+    
     }
 
     .loginForm input{
         border-top: none;
         border-left: none;
         border-right: none;
-        margin: 10px;
+        margin: 20px 10px;
+        width: 80%;
     }
 
     .loginForm button{
         border: none;
-        width: 128px;
         border-radius: 5px;
         background: linear-gradient(109.6deg, rgb(128, 144, 233) 17.4%, rgb(171, 88, 238) 52.4%, rgb(255, 129, 246) 91%);
         height: 32px;
-        margin: 10px;
+        margin: 40px 10px;
+        width: 80%;
     }
 </style>

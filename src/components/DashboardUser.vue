@@ -65,6 +65,7 @@ const prop = "test4"
     .backgrouand{
         /* margin: 10px; */
         display: grid;
+    
         grid-template-columns: repeat(auto-fit, minmax(256px, 2fr));
         /* grid-gap: 25px; */
         position: relative;

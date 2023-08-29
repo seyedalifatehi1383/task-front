@@ -31,7 +31,7 @@ function Logout() {
         <h2 >Task Manager</h2>
     </RouterLink>
     
-    <div v-if="token == undefined" class="LoginSignIn">
+    <div v-if="token == undefined" class="BTNS">
         <RouterLink to="/SignUp">
             <button >signup</button>
         </RouterLink>
@@ -40,8 +40,8 @@ function Logout() {
             <button >login</button>
         </RouterLink>
     </div>
-    <div v-else>
-        <button style="left: 85%;" @click="Logout()">Logout</button>
+    <div v-else class="BTNS">
+        <button  @click="Logout()">Logout</button>
     </div>
 </div>
 
@@ -80,7 +80,7 @@ function Logout() {
         background-color: rgb(248, 159, 248);
     }
 
-    .LoginSignIn{
+    .BTNS{
         position: relative;
         width: 90%;
         height: 50%;

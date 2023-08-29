@@ -31,14 +31,14 @@ function Logout() {
         <h2 >Task Manager</h2>
     </RouterLink>
     
-    <div v-if="token == undefined">
+    <div v-if="token == undefined" class="LoginSignIn">
         <RouterLink to="/SignUp">
-        <button style="left: 85%;">signup</button>
-    </RouterLink>
+            <button >signup</button>
+        </RouterLink>
 
-    <RouterLink to="/Login">
-        <button style="left: 90%;">login</button>
-    </RouterLink>
+        <RouterLink to="/Login">
+            <button >login</button>
+        </RouterLink>
     </div>
     <div v-else>
         <button style="left: 85%;" @click="Logout()">Logout</button>
@@ -71,13 +71,21 @@ function Logout() {
         height: 50px;
         margin: 10px;
         float: right;
-        position: absolute;
-        /* align-self: right: inherit;; */
+        position: relative;
+        align-self: right;
         /* left: 80%; */
         border: none;
         border-radius: 5px;
         width: 64px;
         background-color: rgb(248, 159, 248);
     }
+
+    .LoginSignIn{
+        position: relative;
+        width: 90%;
+        height: 50%;
+        align-self: center;
+    }
+    
 
 </style>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import DefualtHome from '@/components/DefualtHome.vue';
 import UserHome from '@/components/UserHome.vue';
+import DashboardAdmin from '@/components/DashboardAdmin.vue';
 import DashboardUser from '../components/DashboardUser.vue'
 import { Autenticate } from "../stores/counter";
 import SubAdminDashboard from '@/components/SubAdminDashboard.vue';
@@ -38,6 +39,9 @@ onMounted(async () =>{
         </div>
         <div v-if="WhoAmI.accessLevel == 'SubAdmin'">
             <SubAdminDashboard/>
+        </div>
+        <div v-if="WhoAmI.accessLevel == 'Admin'">
+            <DashboardAdmin/>
         </div>
     </div>
     <!-- <DashboardUser /> -->

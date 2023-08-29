@@ -34,10 +34,7 @@
             <div class="seeTasks" v-if="user.showTasks" style="margin: 15px;">
                 <ul v-for="(tasks, taskIndex) in allTasks[mainIndex]" :key="tasks.id">
                     <li>
-                        <span>
-                            {{ tasks.title }}
-                        </span>
-
+                        <span> {{ tasks.title }} </span>
                         <span @click="tasks.showDetails = !tasks.showDetails" class="taskTitle"
                             style="margin-left: 5px; margin-bottom: -5px;" title="show/hide description">
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
@@ -48,7 +45,7 @@
                         </span>
 
                         <span style="float: right;" title="delete task">
-                            <svg @click="deleteTask(user.id, tasks.id)" style="cursor: pointer;"
+                            <svg @click="showDeleteTaskModal = true" style="cursor: pointer;"
                                 xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
                                 class="bi bi-trash-fill" viewBox="0 0 16 16">
                                 <path title="delete task"
@@ -56,9 +53,10 @@
                             </svg>
                         </span>
 
-                        <span style="float: right;" @click="editTask(user.id, tasks.id, mainIndex, taskIndex)" title="edit task">
-                            <svg style="margin-right: 10px; cursor: pointer;" xmlns="http://www.w3.org/2000/svg" width="25"
-                                height="25" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                        <span style="float: right;" title="edit task">
+                            <svg @click="showEditTaskModal = true" style="margin-right: 10px; cursor: pointer;"
+                                xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                                class="bi bi-pencil-square" viewBox="0 0 16 16">
                                 <path
                                     d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                 <path fill-rule="evenodd"
@@ -68,43 +66,27 @@
                     </li>
 
                     <blockquote v-if="tasks.showDetails"> {{ tasks.desc }} </blockquote>
+
+                    <AddTaskModal v-if="showAddTaskModal" @close-modal="closeModal" />
+                    <EditTaskModal v-if="showEditTaskModal" @close-task-modal="closeTaskModal" />
+                    <DeleteAlertModal v-if="showDeleteTaskModal" @delete-task="deleteTask(user.id, tasks.id)"
+                        @close-delete-modal="closeDeleteModal" />
                 </ul>
-
-                <!-- <details v-for="tasks in allTasks[mainIndex]">
-                    <summary>
-                        <span> {{ tasks.title }} </span>
-                    </summary>
-
-                    <svg @click="" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
-                    class="bi bi-trash-fill" viewBox="0 0 16 16" title="delete task">
-                    <path
-                            d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
-                    </svg>
-
-                    <svg @click="" style="margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="25" height="25"
-                        fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" title="edit task">
-                        <path
-                            d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                        <path fill-rule="evenodd"
-                            d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
-                    </svg>
-
-                    <blockquote> {{ tasks.desc }} </blockquote>
-
-                </details> -->
             </div>
         </div>
     </div>
-
-    <AddTaskModal v-if="showAddTaskModal" @close-modal="closeModal" />
 </template>
 
 <script setup lang="ts">
 import AddTaskModal from '@/components/AddTaskModal.vue';
+import EditTaskModal from '@/components/EditTaskModal.vue';
+import DeleteAlertModal from '@/components/DeleteAlertModal.vue';
 import { onMounted, ref } from 'vue';
 
 const token = localStorage.getItem("TOKEN")
 let showAddTaskModal = ref(false)
+let showEditTaskModal = ref(false)
+let showDeleteTaskModal = ref(false)
 
 let users = ref([{ id: '', username: '', email: '', showTasks: false }])
 onMounted(async () => {
@@ -123,14 +105,6 @@ async function getTasks(userId: string, index: number) {
     allTasks.value[index] = await resaultTasks.json()
 }
 
-function callGetTasks(userId: string, index: number) {
-    getTasks(userId, index);
-}
-
-function closeModal() {
-    showAddTaskModal.value = !showAddTaskModal.value
-}
-
 async function deleteTask(userId: string, taskId: number) {
     await fetch('http://localhost:3000/Admin/' + userId + '/task/' + taskId, {
         headers: {
@@ -145,15 +119,32 @@ async function deleteTask(userId: string, taskId: number) {
 
 async function editTask(userId: string, taskId: number, mainIndex: number, taskIndex: number) {
     let tasks = allTasks.value[mainIndex]
-    
+
+
     await fetch('http://localhost:3000/AdminOrSubAdmin/' + userId + '/task/' + taskId, {
         headers: {
             "Content-Type": "application/json",
             'Authorization': token!
         },
         method: "Patch",
-        body: JSON.stringify({ title: tasks[taskIndex].title, desc: tasks[taskIndex].desc})
+        body: JSON.stringify({ title: tasks[taskIndex].title, desc: tasks[taskIndex].desc })
     })
+}
+
+function callGetTasks(userId: string, index: number) {
+    getTasks(userId, index);
+}
+
+function closeModal() {
+    showAddTaskModal.value = !showAddTaskModal.value
+}
+
+function closeTaskModal() {
+    showEditTaskModal.value = !showEditTaskModal.value
+}
+
+function closeDeleteModal() {
+    showDeleteTaskModal.value = !showDeleteTaskModal.value
 }
 </script>
 

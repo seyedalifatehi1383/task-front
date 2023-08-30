@@ -86,6 +86,28 @@ function Logout() {
         height: 50%;
         align-self: center;
     }
+
+    .Header button:hover{
+        scale: 110%;
+        cursor: pointer;
+        transition: 0.2s;
+
+    }
+
+    @keyframes example {
+    from {border: 0px solid white;}
+    to {border: 5px solid white;}
+    } 
+
+    .Header h2:hover{
+        scale: 110%;
+        cursor: pointer;
+        transition: 0.2s;
+        margin: 20px 5px;
+        
+    }
+
+      
     
 
 </style>

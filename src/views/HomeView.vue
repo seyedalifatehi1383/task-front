@@ -15,7 +15,7 @@ onMounted(async () =>{
     const Who = await fetch('http://localhost:3000/whoAmI', { headers: { 'Authorization': token.value! } })
     if (Who.status == 401) {
         localStorage.clear()
-        window.location.reload()
+        // window.location.reload()
     } else {
         WhoAmI.value = await Who.json();
         

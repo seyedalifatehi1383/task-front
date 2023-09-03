@@ -67,14 +67,15 @@
 
                     <blockquote v-if="tasks.showDetails"> {{ tasks.desc }} </blockquote>
 
-                    <AddTaskModal v-if="showAddTaskModal" @close-modal="closeModal" />
-                    <EditTaskModal v-if="showEditTaskModal" @close-task-modal="closeTaskModal" />
                     <DeleteAlertModal v-if="showDeleteTaskModal" @delete-task="deleteTask(user.id, tasks.id)"
                         @close-delete-modal="closeDeleteModal" />
                 </ul>
             </div>
         </div>
     </div>
+
+    <AddTaskModal v-if="showAddTaskModal" @close-modal="closeModal" @add-task="addTask" />
+    <EditTaskModal v-if="showEditTaskModal" @close-task-modal="closeTaskModal" />
 </template>
 
 <script setup lang="ts">
@@ -126,7 +127,21 @@ async function editTask(userId: string, taskId: number, mainIndex: number, taskI
             "Content-Type": "application/json",
             'Authorization': token!
         },
-        method: "Patch",
+        method: "PATCH",
+        body: JSON.stringify({ title: tasks[taskIndex].title, desc: tasks[taskIndex].desc })
+    })
+}
+
+async function addTask(userId: string, mainIndex: number, taskIndex: number) {
+    let tasks = allTasks.value[mainIndex]
+
+
+    await fetch('http://localhost:3000/AdminOrSubAdmin/' + userId + '/task', {
+        headers: {
+            "Content-Type": "application/json",
+            'Authorization': token!
+        },
+        method: "POST",
         body: JSON.stringify({ title: tasks[taskIndex].title, desc: tasks[taskIndex].desc })
     })
 }

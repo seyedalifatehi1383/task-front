@@ -30,10 +30,11 @@
                     </svg>
                 </div>
             </div>
-
+            
             <div class="seeTasks" v-if="user.showTasks" style="margin: 15px;">
                 <ul v-for="(tasks, taskIndex) in allTasks[mainIndex]" :key="tasks.id">
                     <li>
+                        
                         <span> {{ tasks.title }} </span>
                         <span @click="tasks.showDetails = !tasks.showDetails" class="taskTitle"
                             style="margin-left: 5px; margin-bottom: -5px;" title="show/hide description">
@@ -54,7 +55,7 @@
                         </span>
 
                         <span style="float: right;" title="edit task">
-                            <svg @click="showEditTaskModal = true" style="margin-right: 10px; cursor: pointer;"
+                            <svg @click="editMessage(tasks.title,tasks.desc , tasks.id ,user.id)" style="margin-right: 10px; cursor: pointer;"
                                 xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
                                 class="bi bi-pencil-square" viewBox="0 0 16 16">
                                 <path
@@ -64,18 +65,19 @@
                             </svg>
                         </span>
                     </li>
-
+                    
                     <blockquote v-if="tasks.showDetails"> {{ tasks.desc }} </blockquote>
-
+                    
                     <DeleteAlertModal v-if="showDeleteTaskModal" @delete-task="deleteTask(user.id, tasks.id)"
-                        @close-delete-modal="closeDeleteModal" />
+                    @close-delete-modal="closeDeleteModal" />
+                    <EditTaskModal v-if="showEditTaskModal" @close-task-modal="closeTaskModal" :title="messageEditClick.title" :desc="messageEditClick.desc" :task-id="messageEditClick.taskId" :user-id="messageEditClick.userId"/>
+
                 </ul>
             </div>
         </div>
     </div>
 
     <AddTaskModal v-if="showAddTaskModal" @close-modal="closeModal" @add-task="addTask" />
-    <EditTaskModal v-if="showEditTaskModal" @close-task-modal="closeTaskModal" />
 </template>
 
 <script setup lang="ts">
@@ -88,7 +90,12 @@ const token = localStorage.getItem("TOKEN")
 let showAddTaskModal = ref(false)
 let showEditTaskModal = ref(false)
 let showDeleteTaskModal = ref(false)
-
+let messageEditClick = {
+    title : '',
+    desc : '',
+    taskId : 0,
+    userId : ''
+}
 let users = ref([{ id: '', username: '', email: '', showTasks: false }])
 onMounted(async () => {
     const resaultUsers = await fetch('http://localhost:3000/showUsers', { headers: { 'Authorization': token! } })
@@ -115,7 +122,13 @@ async function deleteTask(userId: string, taskId: number) {
         method: "DELETE"
     })
 
-    window.location.reload()
+    for (let index = 0; index < users.value.length; index++) {
+        getTasks(users.value[index].id , index)
+        
+    }    
+
+    showDeleteTaskModal.value = false
+    // window.location.reload()
 }
 
 async function editTask(userId: string, taskId: number, mainIndex: number, taskIndex: number) {
@@ -160,6 +173,14 @@ function closeTaskModal() {
 
 function closeDeleteModal() {
     showDeleteTaskModal.value = !showDeleteTaskModal.value
+}
+
+function editMessage(title : string , desc : string , taskId : number , userId : string ) {
+    showEditTaskModal.value = true
+    messageEditClick.title = title,
+    messageEditClick.desc = desc,
+    messageEditClick.taskId = taskId,
+    messageEditClick.userId = userId
 }
 </script>
 

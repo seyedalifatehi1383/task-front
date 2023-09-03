@@ -2,28 +2,46 @@
     <div class="modal-bg" @click="closeModal"></div>
     <div class="modalContent">
         <h1> Edit User Task </h1>
-        <input type="text" id="Title" name="Title" placeholder="Title" required>
+        <input type="text" id="Title" name="Title" placeholder="Title" required  v-model="title">
 
         <br><br>
 
-        <textarea name="description" id="description" cols="30" rows="10" placeholder="Description" required></textarea>
+        <textarea name="description" id="description" cols="30" rows="10" placeholder="Description" required v-model="desc"></textarea>
         <!-- <input type="text" id="Description" name="Description" placeholder="Description" required> -->
 
         <br><br>
 
-        <button style="cursor: pointer;"  @click=""> Edit task </button>
+        <button style="cursor: pointer;"  @click="editTask()"> Edit task </button>
     </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+const token = localStorage.getItem("TOKEN")
 const emit = defineEmits(['close-task-modal']);
-const prop = defineProps()
-
+const prop = defineProps(['title','desc' , 'taskId' , 'userId'])
+let title = ref(prop.title)
+let desc = ref(prop.desc)
 function closeModal() {
     emit('close-task-modal'); // Emit the 'close-modal' event to the parent component
 }
 
 function addTask(userId : string) {
+    
+}
+
+async function editTask() {
+    const resualt = await fetch('http://localhost:3000/AdminOrSubAdmin/'+prop.userId+'/tasks/' + prop.taskId , {
+        headers : {"Content-Type": "application/json" , 'Authorization': token!},
+        method : "PATCH",
+        body : JSON.stringify({title : title.value , desc : desc.value})
+    })
+
+    if (resualt.status !== 200) {
+        alert(resualt.status)
+    }else{
+        closeModal()
+    }
     
 }
 

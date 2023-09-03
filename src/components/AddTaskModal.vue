@@ -11,20 +11,20 @@
 
         <br><br>
 
-        <button style="cursor: pointer;" @click="addTask()"> Add task </button>
+        <button style="cursor: pointer;" @click="addTask"> Add task </button>
     </div>
 </template>
 
 <script setup lang="ts">
-const emit = defineEmits(['close-modal']);
+const emit = defineEmits(['close-modal', 'add-task']);
 const prop = defineProps()
 
 function closeModal() {
     emit('close-modal'); // Emit the 'close-modal' event to the parent component
 }
 
-function addTask(userId : string) {
-    
+function addTask() {
+    emit('add-task')
 }
 </script>
 

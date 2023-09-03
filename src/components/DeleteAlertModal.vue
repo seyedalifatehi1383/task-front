@@ -9,7 +9,7 @@
             </svg>
         </div>
 
-        <p style="margin: 20px; font-size: 35px; color: black;"> Are you sure to delete this task? </p>
+        <p style="margin: 20px; font-size: 35px; color: rgb(171, 88, 238);"> Are you sure to delete this task? </p>
         <button @click="deleteTask" style="margin-bottom: 10px; margin-right: 10px; margin-left: 10px;"> Yes </button>
         <button @click="closeDeleteModal" style="margin-bottom: 10px; margin-left: 10px; margin-right: 10px;"> No </button>
         <!-- <h1>Your signing up has been successfully completed.</h1>

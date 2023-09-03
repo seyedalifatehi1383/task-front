@@ -8,6 +8,7 @@ import UnfinishedTask from '../views/UnfinishedTask.vue'
 import ChatPage from '../views/ChatPage.vue'
 import ManageUsers from '../views/ManageUsers.vue'
 import ChangePromote from '../views/ChangePromote.vue'
+import ManageSubAdmins from '../views/ManageSubAdmins.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -63,6 +64,12 @@ const router = createRouter({
       path: '/ChangePromote',
       name: 'ChangePromote',
       component: ChangePromote
+    },
+
+    {
+      path: '/ManageSubAdmins',
+      name: 'ManageSubAdmins',
+      component: ManageSubAdmins
     },
   ]
 })

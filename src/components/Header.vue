@@ -31,17 +31,17 @@ function Logout() {
         <h2 >Task Manager</h2>
     </RouterLink>
     
-    <div v-if="token == undefined">
+    <div v-if="token == undefined" class="BTNS">
         <RouterLink to="/SignUp">
-        <button style="left: 85%;">signup</button>
-    </RouterLink>
+            <button >signup</button>
+        </RouterLink>
 
-    <RouterLink to="/Login">
-        <button style="left: 90%;">login</button>
-    </RouterLink>
+        <RouterLink to="/Login">
+            <button >login</button>
+        </RouterLink>
     </div>
-    <div v-else>
-        <button style="left: 85%;" @click="Logout()">Logout</button>
+    <div v-else class="BTNS">
+        <button  @click="Logout()">Logout</button>
     </div>
 </div>
 
@@ -71,13 +71,43 @@ function Logout() {
         height: 50px;
         margin: 10px;
         float: right;
-        position: absolute;
-        /* align-self: right: inherit;; */
+        position: relative;
+        align-self: right;
         /* left: 80%; */
         border: none;
         border-radius: 5px;
         width: 64px;
         background-color: rgb(248, 159, 248);
     }
+
+    .BTNS{
+        position: relative;
+        width: 90%;
+        height: 50%;
+        align-self: center;
+    }
+
+    .Header button:hover{
+        scale: 110%;
+        cursor: pointer;
+        transition: 0.2s;
+
+    }
+
+    @keyframes example {
+    from {border: 0px solid white;}
+    to {border: 5px solid white;}
+    } 
+
+    .Header h2:hover{
+        scale: 110%;
+        cursor: pointer;
+        transition: 0.2s;
+        margin: 20px 5px;
+        
+    }
+
+      
+    
 
 </style>

@@ -2,32 +2,50 @@
     <div class="modal-bg" @click="closeModal"></div>
     <div class="modalContent">
         <h1> Edit Message </h1>
+        <p>{{ title }} , {{ text }} , {{ group }}</p>
         <label style="color: white;" for="text">Title</label>
         <br>
-        <input type="text" id="Title" name="Title" :value="prop.title" required>
+        <input type="text" id="Title" name="Title" v-model="newMessage.title"  required>
 
         <br><br>
         <label style="color: white;" for="text">Text</label>
         <br>
-        <input type="text" id="Text" name="Text" :value="prop.text" required>
+        <input type="text" id="Text" name="Text" v-model="newMessage.text" required>
 
         <br><br>
         <label style="color: white;" for="text">Group</label>
         <br>
-        <input type="Group" id="Group" name="Group" :value="prop.group" required>
+        <input type="Group" id="Group" name="Group" v-model="newMessage.group" required>
 
         <br><br>
 
-        <button> Edit Message </button>
+        <button @click="EditMessage()"> Edit Message </button>
     </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+const token = localStorage.getItem("TOKEN")
 const emit = defineEmits(['close-modal']);
-const prop = defineProps(['title' , 'text' , 'group'])
-
+let prop = defineProps(['title' , 'text' , 'group' , 'id'])
+let newMessage = ref({title : prop.title ,text : prop.text , group : prop.group})
 function closeModal() {
     emit('close-modal'); // Emit the 'close-modal' event to the parent component
+}
+
+async function EditMessage() {
+    // In this fetch edit message and if have error alert error code 
+    const deleteResualt = await fetch('http://localhost:3000/new-users/chats/'+prop.id, { 
+        method : 'PATCH',
+        headers: { "Content-Type": "application/json" , 'Authorization': token! },
+        body : JSON.stringify({title : newMessage.value.title , text : newMessage.value.text , group : newMessage.value.group})
+        })
+    if (deleteResualt.status !== 200) {
+        alert('Message dont deleted the error code is :' + deleteResualt.status)
+    }
+    //this emit close edit panel after edit message
+    emit('close-modal');
+    
 }
 
 

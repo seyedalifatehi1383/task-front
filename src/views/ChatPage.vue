@@ -11,7 +11,7 @@ let Title = ref('')
 let Group = ref('')
 let sendresualt = ref('')
 const token = localStorage.getItem("TOKEN")
-let editDefualt = ref({title : '' , text : '' , group :''})
+let editDefualt = ref({title : '' , text : '' , group :'' ,id:0})
 let checkClickEdit = false
 onMounted(async () =>{
     const restualt = await fetch('http://localhost:3000/chats', { headers: { 'Authorization': token! } })
@@ -40,6 +40,16 @@ async function SENDMessage() {
     Group.value = ''
 }
 
+async function DeleteMessageAdmin(id:number) {
+    const deleteResualt = await fetch('http://localhost:3000/chats/Admin/'+id, { 
+        method : 'DELETE',
+        headers: { "Content-Type": "application/json" , 'Authorization': token! },
+        })
+    if (deleteResualt.status !== 200) {
+        alert('Message dont deleted the error code is :' + deleteResualt.status)
+    }
+}
+
 async function DeleteMessage(id : number) {
     const deleteResualt = await fetch('http://localhost:3000/new-users/chats/'+id, { 
         method : 'DELETE',
@@ -56,7 +66,7 @@ function EditMessage(title : string , text : string ,group : string, id : number
     editDefualt.value.title = title
     editDefualt.value.text = text
     editDefualt.value.group = group
-    
+    editDefualt.value.id = id
     
 }
 
@@ -64,7 +74,7 @@ function EditMessage(title : string , text : string ,group : string, id : number
 </script>
 
 <template>
-    <Messagemodal @close-modal="checkClickEdit = false" v-if="checkClickEdit" :group="editDefualt.group" :title="editDefualt.title" :text="editDefualt.text"/>
+    <Messagemodal @close-modal="checkClickEdit = false" v-if="checkClickEdit" :group="editDefualt.group" :title="editDefualt.title" :text="editDefualt.text" :id="editDefualt.id" />
     <div class="background">
         <div class="MessageAll" v-for="Message in Messages">
             <div class="MessageOther" v-if="WhoAmI.username !== Message.name">
@@ -92,7 +102,7 @@ function EditMessage(title : string , text : string ,group : string, id : number
                 {{ Message.group }}
             </div>
 
-            <div class="deleteMessage" v-if="WhoAmI.accessLevel == 'Admin'">
+            <div @click="DeleteMessageAdmin(Message.id)" class="deleteMessage" v-if="WhoAmI.accessLevel == 'Admin'">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                 <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
                 </svg>
@@ -182,7 +192,7 @@ function EditMessage(title : string , text : string ,group : string, id : number
         /* margin-left: 80%; */
         position: relative;
         left: 79%;
-        direction: rtl;
+        direction: ltr;
         
     }
 

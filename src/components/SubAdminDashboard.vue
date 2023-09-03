@@ -89,7 +89,7 @@
 .dashboard-container {
     position: relative;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     grid-template-rows: auto;
 }
 
@@ -129,5 +129,4 @@
     scale: 120%;
     transition: 0.8s;
     cursor: pointer;
-}
-</style>
+}</style>

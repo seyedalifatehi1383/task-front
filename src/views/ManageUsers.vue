@@ -46,7 +46,7 @@
                         </span>
 
                         <span style="float: right;" title="delete task">
-                            <svg @click="showDeleteTaskModal = true" style="cursor: pointer;"
+                            <svg @click="addTask(user.id)" style="cursor: pointer;"
                                 xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
                                 class="bi bi-trash-fill" viewBox="0 0 16 16">
                                 <path title="delete task"
@@ -69,14 +69,15 @@
                     <blockquote v-if="tasks.showDetails"> {{ tasks.desc }} </blockquote>
                     
                     <DeleteAlertModal v-if="showDeleteTaskModal" @delete-task="deleteTask(user.id, tasks.id)" @closeDeleteModal="closeDeleteModal()" />
+                    
                     <EditTaskModal v-if="showEditTaskModal" @close-task-modal="closeTaskModal" :title="messageEditClick.title" :desc="messageEditClick.desc" :task-id="messageEditClick.taskId" :user-id="messageEditClick.userId"/>
-
+                    
                 </ul>
             </div>
         </div>
     </div>
-
-    <AddTaskModal v-if="showAddTaskModal" @close-modal="closeModal" @add-task="addTask" />
+    
+    <AddTaskModal v-if="showAddTaskModal" @close-modal="closeModal" :user-id="addTaskProps.userId" :addTtitle="addTaskProps.title" :addDesc="addTaskProps.desc" />
 </template>
 
 <script setup lang="ts">
@@ -95,6 +96,13 @@ let messageEditClick = {
     taskId : 0,
     userId : ''
 }
+
+let addTaskProps = {
+    userId : '',
+    title : '',
+    desc : '',
+}
+
 let users = ref([{ id: '', username: '', email: '', showTasks: false }])
 onMounted(async () => {
     const resaultUsers = await fetch('http://localhost:3000/showUsers', { headers: { 'Authorization': token! } })
@@ -131,19 +139,20 @@ async function deleteTask(userId: string, taskId: number) {
 }
 
 
-async function addTask(userId: string, mainIndex: number, taskIndex: number) {
-    let tasks = allTasks.value[mainIndex]
+// async function addTask1(userId: string, mainIndex: number, taskIndex: number) {
+//     let tasks = allTasks.value[mainIndex]
 
 
-    await fetch('http://localhost:3000/AdminOrSubAdmin/' + userId + '/task', {
-        headers: {
-            "Content-Type": "application/json",
-            'Authorization': token!
-        },
-        method: "POST",
-        body: JSON.stringify({ title: tasks[taskIndex].title, desc: tasks[taskIndex].desc })
-    })
-}
+//     await fetch('http://localhost:3000/AdminOrSubAdmin/' + userId + '/task', {
+//         headers: {
+//             "Content-Type": "application/json",
+//             'Authorization': token!
+//         },
+//         method: "POST",
+//         body: JSON.stringify({ title: tasks[taskIndex].title, desc: tasks[taskIndex].desc })
+//     })
+// }
+
 
 function callGetTasks(userId: string, index: number) {
     getTasks(userId, index);
@@ -165,6 +174,10 @@ function closeDeleteModal() {
     showDeleteTaskModal.value = !showDeleteTaskModal.value
 }
 
+function addTask(userId : string) {
+    showDeleteTaskModal.value = true
+    addTaskProps.userId = userId
+}
 
 function editMessage(title : string , desc : string , taskId : number , userId : string ) {
     showEditTaskModal.value = true

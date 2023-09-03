@@ -2,30 +2,51 @@
     <div class="modal-bg" @click="closeModal"></div>
     <div class="modalContent">
         <h1> Add Task for user </h1>
-        <input type="text" id="Title" name="Title" placeholder="Title" required>
+        <input type="text" id="Title" name="Title" placeholder="Title" required v-model="addTitle">
 
         <br><br>
 
-        <textarea name="description" id="description" cols="30" rows="10" placeholder="Description" required></textarea>
+        <textarea name="description" id="description" cols="30" rows="10" placeholder="Description" required
+            v-model="addDesc"></textarea>
         <!-- <input type="text" id="Description" name="Description" placeholder="Description" required> -->
 
         <br><br>
 
-        <button style="cursor: pointer;" @click="addTask"> Add task </button>
+        <button style="cursor: pointer;" @click="addTask()"> Add task </button>
     </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+
 const emit = defineEmits(['close-modal', 'add-task']);
-const prop = defineProps()
+const prop = defineProps(['userId', 'addTitle', 'addDesc']);
+let addTitle = ref(prop.addTitle);
+let addDesc = ref(prop.addDesc);
+const token = localStorage.getItem("TOKEN")
 
 function closeModal() {
     emit('close-modal'); // Emit the 'close-modal' event to the parent component
 }
 
-function addTask() {
-    emit('add-task')
+async function addTask() {
+    const resualt = await fetch('http://localhost:3000/AdminOrSubAdmin/' + prop.userId + '/task', {
+        headers :{
+            "Content-Type" : "application/json",
+            'Authorization': token!
+        },
+        method: "POST",
+        body: JSON.stringify({ title: addTitle.value, desc: addDesc.value })
+    })
+
+    if (resualt.status !== 200) {
+        alert(resualt.status)
+    } else {
+        closeModal()
+    }
+
 }
+
 </script>
 
 <style scoped>
@@ -84,7 +105,7 @@ textarea {
     border-right: none;
     border-left: none;
     border-bottom: 1px solid black;
-    resize: vertical;   
+    resize: vertical;
 }
 
 button {

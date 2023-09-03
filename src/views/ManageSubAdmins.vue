@@ -54,7 +54,7 @@
                         </span>
 
                         <span style="float: right;" title="edit task">
-                            <svg @click="showEditTaskModal = true" style="margin-right: 10px; cursor: pointer;"
+                            <svg @click="editMessage(tasks.title, tasks.desc, tasks.id , subAdmin.id)" style="margin-right: 10px; cursor: pointer;"
                                 xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
                                 class="bi bi-pencil-square" viewBox="0 0 16 16">
                                 <path
@@ -75,7 +75,7 @@
     </div>
 
     <AddTaskModal v-if="showAddTaskModal" @close-modal="closeModal" @add-task="addTask" />
-    <EditTaskModal v-if="showEditTaskModal" @close-task-modal="closeTaskModal" />
+    <EditTaskModal v-if="showEditTaskModal" @close-task-modal="closeTaskModal" :title="messageEditClick.title" :desc="messageEditClick.desc" :user-id="messageEditClick.userId" :task-id="messageEditClick.taskId" />
 </template>
 
 <script setup lang="ts">
@@ -83,7 +83,12 @@ import AddTaskModal from '@/components/AddTaskModal.vue';
 import EditTaskModal from '@/components/EditTaskModal.vue';
 import DeleteAlertModal from '@/components/DeleteAlertModal.vue';
 import { onMounted, ref } from 'vue';
-
+let messageEditClick = {
+    title : '',
+    desc : '',
+    taskId : 0,
+    userId : ''
+}
 const token = localStorage.getItem("TOKEN")
 let showAddTaskModal = ref(false)
 let showEditTaskModal = ref(false)
@@ -153,6 +158,15 @@ async function addTask(userId: string, mainIndex: number, taskIndex: number) {
     })
 }
 
+function editMessage(title : string , desc : string , taskId : number , userId : string ) {
+    showEditTaskModal.value = true
+    messageEditClick.title = title,
+    messageEditClick.desc = desc,
+    messageEditClick.taskId = taskId,
+    messageEditClick.userId = userId
+}
+
+
 function callGetTasks(subAdminId: string, index: number) {
     getTasks(subAdminId, index);
 }
@@ -163,7 +177,10 @@ function closeModal() {
 
 function closeTaskModal() {
     showEditTaskModal.value = !showEditTaskModal.value
-}
+    for (let index = 0; index < subAdmins.value.length; index++) {
+        getTasks(subAdmins.value[index].id , index)
+        
+    } }
 
 function closeDeleteModal() {
     showDeleteTaskModal.value = !showDeleteTaskModal.value

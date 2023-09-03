@@ -36,7 +36,7 @@ async function editTask() {
         method : "PATCH",
         body : JSON.stringify({title : title.value , desc : desc.value})
     })
-
+    
     if (resualt.status !== 200) {
         alert(resualt.status)
     }else{

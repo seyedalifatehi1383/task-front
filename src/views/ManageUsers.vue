@@ -68,8 +68,7 @@
                     
                     <blockquote v-if="tasks.showDetails"> {{ tasks.desc }} </blockquote>
                     
-                    <DeleteAlertModal v-if="showDeleteTaskModal" @delete-task="deleteTask(user.id, tasks.id)"
-                    @close-delete-modal="closeDeleteModal" />
+                    <DeleteAlertModal v-if="showDeleteTaskModal" @delete-task="deleteTask(user.id, tasks.id)" />
                     <EditTaskModal v-if="showEditTaskModal" @close-task-modal="closeTaskModal" :title="messageEditClick.title" :desc="messageEditClick.desc" :task-id="messageEditClick.taskId" :user-id="messageEditClick.userId"/>
 
                 </ul>
@@ -131,19 +130,6 @@ async function deleteTask(userId: string, taskId: number) {
     // window.location.reload()
 }
 
-async function editTask(userId: string, taskId: number, mainIndex: number, taskIndex: number) {
-    let tasks = allTasks.value[mainIndex]
-
-
-    await fetch('http://localhost:3000/AdminOrSubAdmin/' + userId + '/task/' + taskId, {
-        headers: {
-            "Content-Type": "application/json",
-            'Authorization': token!
-        },
-        method: "PATCH",
-        body: JSON.stringify({ title: tasks[taskIndex].title, desc: tasks[taskIndex].desc })
-    })
-}
 
 async function addTask(userId: string, mainIndex: number, taskIndex: number) {
     let tasks = allTasks.value[mainIndex]
@@ -169,11 +155,13 @@ function closeModal() {
 
 function closeTaskModal() {
     showEditTaskModal.value = !showEditTaskModal.value
+    for (let index = 0; index < users.value.length; index++) {
+        getTasks(users.value[index].id , index)
+        
+    }  
 }
 
-function closeDeleteModal() {
-    showDeleteTaskModal.value = !showDeleteTaskModal.value
-}
+
 
 function editMessage(title : string , desc : string , taskId : number , userId : string ) {
     showEditTaskModal.value = true

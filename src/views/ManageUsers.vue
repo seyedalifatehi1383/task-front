@@ -10,8 +10,8 @@
                 <h1>{{ user.username }}</h1>
 
                 <div class="addTask" title="add task for user">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor"
-                        class="bi bi-file-earmark-plus-fill" viewBox="0 0 16 16" @click="showAddTaskModal = true">
+                    <svg @click="addTask(user.id)" xmlns="http://www.w3.org/2000/svg" width="64" height="64"
+                        fill="currentColor" class="bi bi-file-earmark-plus-fill" viewBox="0 0 16 16">
                         <path
                             d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0zM9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1zM8.5 7v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 1 0z" />
                     </svg>
@@ -30,11 +30,11 @@
                     </svg>
                 </div>
             </div>
-            
+
             <div class="seeTasks" v-if="user.showTasks" style="margin: 15px;">
                 <ul v-for="(tasks, taskIndex) in allTasks[mainIndex]" :key="tasks.id">
                     <li>
-                        
+
                         <span> {{ tasks.title }} </span>
                         <span @click="tasks.showDetails = !tasks.showDetails" class="taskTitle"
                             style="margin-left: 5px; margin-bottom: -5px;" title="show/hide description">
@@ -46,7 +46,7 @@
                         </span>
 
                         <span style="float: right;" title="delete task">
-                            <svg @click="addTask(user.id)" style="cursor: pointer;"
+                            <svg @click="showDeleteTaskModal = true" style="cursor: pointer;"
                                 xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
                                 class="bi bi-trash-fill" viewBox="0 0 16 16">
                                 <path title="delete task"
@@ -55,9 +55,9 @@
                         </span>
 
                         <span style="float: right;" title="edit task">
-                            <svg @click="editMessage(tasks.title,tasks.desc , tasks.id ,user.id)" style="margin-right: 10px; cursor: pointer;"
-                                xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
-                                class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <svg @click="editMessage(tasks.title, tasks.desc, tasks.id, user.id)"
+                                style="margin-right: 10px; cursor: pointer;" xmlns="http://www.w3.org/2000/svg" width="25"
+                                height="25" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                 <path
                                     d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                 <path fill-rule="evenodd"
@@ -65,19 +65,23 @@
                             </svg>
                         </span>
                     </li>
-                    
+
                     <blockquote v-if="tasks.showDetails"> {{ tasks.desc }} </blockquote>
-                    
-                    <DeleteAlertModal v-if="showDeleteTaskModal" @delete-task="deleteTask(user.id, tasks.id)" @closeDeleteModal="closeDeleteModal()" />
-                    
-                    <EditTaskModal v-if="showEditTaskModal" @close-task-modal="closeTaskModal" :title="messageEditClick.title" :desc="messageEditClick.desc" :task-id="messageEditClick.taskId" :user-id="messageEditClick.userId"/>
-                    
+
+                    <DeleteAlertModal v-if="showDeleteTaskModal" @delete-task="deleteTask(user.id, tasks.id)"
+                        @closeDeleteModal="closeDeleteModal()" />
+
+                    <EditTaskModal v-if="showEditTaskModal" @close-task-modal="closeTaskModal"
+                        :title="messageEditClick.title" :desc="messageEditClick.desc" :task-id="messageEditClick.taskId"
+                        :user-id="messageEditClick.userId" />
+
                 </ul>
             </div>
         </div>
     </div>
-    
-    <AddTaskModal v-if="showAddTaskModal" @close-modal="closeModal" :user-id="addTaskProps.userId" :addTtitle="addTaskProps.title" :addDesc="addTaskProps.desc" />
+
+    <AddTaskModal v-if="showAddTaskModal" @close-modal="closeModal" :user-id="addTaskProps.userId"
+        :addTtitle="addTaskProps.title" :addDesc="addTaskProps.desc" />
 </template>
 
 <script setup lang="ts">
@@ -91,16 +95,16 @@ let showAddTaskModal = ref(false)
 let showEditTaskModal = ref(false)
 let showDeleteTaskModal = ref(false)
 let messageEditClick = {
-    title : '',
-    desc : '',
-    taskId : 0,
-    userId : ''
+    title: '',
+    desc: '',
+    taskId: 0,
+    userId: ''
 }
 
 let addTaskProps = {
-    userId : '',
-    title : '',
-    desc : '',
+    userId: '',
+    title: '',
+    desc: '',
 }
 
 let users = ref([{ id: '', username: '', email: '', showTasks: false }])
@@ -112,6 +116,8 @@ onMounted(async () => {
         const userId = users.value[i].id;
         callGetTasks(userId, i);
     }
+
+    
 })
 
 let allTasks = ref([[{ id: 0, title: '', desc: '', isfinish: false, showDetails: false }]])
@@ -130,9 +136,9 @@ async function deleteTask(userId: string, taskId: number) {
     })
 
     for (let index = 0; index < users.value.length; index++) {
-        getTasks(users.value[index].id , index)
-        
-    }    
+        getTasks(users.value[index].id, index)
+
+    }
 
     showDeleteTaskModal.value = false
     // window.location.reload()
@@ -165,26 +171,27 @@ function closeModal() {
 function closeTaskModal() {
     showEditTaskModal.value = !showEditTaskModal.value
     for (let index = 0; index < users.value.length; index++) {
-        getTasks(users.value[index].id , index)
-        
-    }  
+        getTasks(users.value[index].id, index)
+
+    }
 }
 
 function closeDeleteModal() {
     showDeleteTaskModal.value = !showDeleteTaskModal.value
 }
 
-function addTask(userId : string) {
-    showDeleteTaskModal.value = true
+function addTask(userId: string) {
+    showAddTaskModal.value = true
     addTaskProps.userId = userId
+
 }
 
-function editMessage(title : string , desc : string , taskId : number , userId : string ) {
+function editMessage(title: string, desc: string, taskId: number, userId: string) {
     showEditTaskModal.value = true
     messageEditClick.title = title,
-    messageEditClick.desc = desc,
-    messageEditClick.taskId = taskId,
-    messageEditClick.userId = userId
+        messageEditClick.desc = desc,
+        messageEditClick.taskId = taskId,
+        messageEditClick.userId = userId
 }
 </script>
 
@@ -235,5 +242,4 @@ function editMessage(title : string , desc : string , taskId : number , userId :
 
 .addTask svg {
     cursor: pointer;
-}
-</style>
+}</style>

@@ -30,7 +30,7 @@ function closeModal() {
 }
 
 async function addTask() {
-    const resualt = await fetch('http://localhost:3000/AdminOrSubAdmin/' + prop.userId + '/task', {
+    const resualt = await fetch('http://localhost:3000/AdminOrSubAdmin/' + prop.userId + '/tasks', {
         headers :{
             "Content-Type" : "application/json",
             'Authorization': token!

@@ -122,7 +122,7 @@ onMounted(async () => {
 
 let allTasks = ref([[{ id: 0, title: '', desc: '', isfinish: false, showDetails: false }]])
 async function getTasks(userId: string, index: number) {
-    const resaultTasks = await fetch('http://localhost:3000/subAdmin/' + userId + '/task', { headers: { 'Authorization': token! } })
+    const resaultTasks = await fetch('http://localhost:3000/AdminOrSubAdmin/' + userId + '/task', { headers: { 'Authorization': token! } })
     allTasks.value[index] = await resaultTasks.json()
 }
 

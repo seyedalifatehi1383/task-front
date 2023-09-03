@@ -114,8 +114,15 @@ async function deleteTask(subAdminId: string, taskId: number) {
         },
         method: "DELETE"
     })
+    
+    for (let index = 0; index < subAdmins.value.length; index++) {
+        getTasks(subAdmins.value[index].id , index)
+        
+    } 
 
-    window.location.reload()
+    showDeleteTaskModal.value = !showDeleteTaskModal.value
+
+    // window.location.reload()
 }
 
 async function editTask(userId: string, taskId: number, mainIndex: number, taskIndex: number) {

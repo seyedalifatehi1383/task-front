@@ -68,7 +68,7 @@
                     
                     <blockquote v-if="tasks.showDetails"> {{ tasks.desc }} </blockquote>
                     
-                    <DeleteAlertModal v-if="showDeleteTaskModal" @delete-task="deleteTask(user.id, tasks.id)" />
+                    <DeleteAlertModal v-if="showDeleteTaskModal" @delete-task="deleteTask(user.id, tasks.id)" @closeDeleteModal="closeDeleteModal()" />
                     <EditTaskModal v-if="showEditTaskModal" @close-task-modal="closeTaskModal" :title="messageEditClick.title" :desc="messageEditClick.desc" :task-id="messageEditClick.taskId" :user-id="messageEditClick.userId"/>
 
                 </ul>
@@ -161,6 +161,9 @@ function closeTaskModal() {
     }  
 }
 
+function closeDeleteModal() {
+    showDeleteTaskModal.value = !showDeleteTaskModal.value
+}
 
 
 function editMessage(title : string , desc : string , taskId : number , userId : string ) {

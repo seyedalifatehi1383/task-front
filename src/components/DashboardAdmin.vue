@@ -9,6 +9,7 @@ onMounted(async () =>{
         headers : {"Authorization" : token.value!}
     })
     if (resualt.status !== 200) {
+    
         alert('Error' + resualt.status)
     } else {
         Admin.value =await resualt.json()
@@ -140,7 +141,6 @@ function closeAddModal() {
     </div>
 
     <AddTaskModal v-if="showAddModal" :user-id="Admin.id" @close-modal="closeAddModal"/>
-
 </template>
 
 
@@ -154,7 +154,6 @@ function closeAddModal() {
     position: relative;
     justify-items: center;
     width: 100%;
-
 }
 
 .panel {
@@ -169,7 +168,11 @@ function closeAddModal() {
     padding: 10px;
     color: white;
     margin: 10px;
-
+    transform: rotate(0deg);
+    animation-name: scale;
+    animation-duration: 1s;
+    animation-direction: alternate;
+    animation-timing-function: ease;
 }
 
 .panel button {
@@ -190,8 +193,20 @@ function closeAddModal() {
 }
 
 .panel:hover {
-    /* scale: 105%; */
-    /* margin: 0px 20px; */
     background-color: rgb(22, 22, 22);
     transition: 0.8s;
-}</style>
+}
+
+
+ @keyframes scale {
+    /* from {transform: rotate(-5deg);}
+    to {transform: rotate(5deg);} */
+    from {scale: 0%;}
+    to {scale: 100%;}
+    /* to {left: 10%;} */
+    
+ }
+
+ 
+
+</style>

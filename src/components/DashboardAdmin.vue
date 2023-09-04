@@ -1,5 +1,23 @@
 <script setup lang="ts">
+import { onMounted, ref } from 'vue';
+import AddTaskModal from './AddTaskModal.vue';
+let token = ref(localStorage.getItem("TOKEN"))
+let Admin = ref({id : ''})
+let showAddModal = ref(false)
+onMounted(async () =>{
+    const resualt = await fetch('http://localhost:3000/whoAmI' , {
+        headers : {"Authorization" : token.value!}
+    })
+    if (resualt.status !== 200) {
+        alert('Error' + resualt.status)
+    } else {
+        Admin.value =await resualt.json()
+    }
+})
 
+function closeAddModal() {
+    showAddModal.value = !showAddModal.value
+}
 </script>
 
 
@@ -115,11 +133,14 @@
             </svg>
             <h1>Admin Add Task</h1>
             <p>Admin can add task to own</p>
-            <button>ADD</button>
+            <button @click="closeAddModal">ADD</button>
         </div>
 
 
     </div>
+
+    <AddTaskModal v-if="showAddModal" :user-id="Admin.id" @close-modal="closeAddModal"/>
+
 </template>
 
 

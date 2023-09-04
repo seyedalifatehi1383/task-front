@@ -11,7 +11,7 @@
 
                 <div class="addTask" title="add task for user">
                     <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor"
-                        class="bi bi-file-earmark-plus-fill" viewBox="0 0 16 16" @click="showAddTaskModal = true">
+                        class="bi bi-file-earmark-plus-fill" viewBox="0 0 16 16" @click="closeModal(subAdmin.id)">
                         <path
                             d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0zM9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1zM8.5 7v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 1 0z" />
                     </svg>
@@ -74,7 +74,7 @@
         </div>
     </div>
 
-    <AddTaskModal v-if="showAddTaskModal" @close-modal="closeModal" @add-task="addTask" />
+    <AddTaskModal v-if="showAddTaskModal" @close-modal="closeModal" :user-id="userIdForAddTask"/>
     <EditTaskModal v-if="showEditTaskModal" @close-task-modal="closeTaskModal" :title="messageEditClick.title" :desc="messageEditClick.desc" :user-id="messageEditClick.userId" :task-id="messageEditClick.taskId" />
 </template>
 
@@ -93,7 +93,7 @@ const token = localStorage.getItem("TOKEN")
 let showAddTaskModal = ref(false)
 let showEditTaskModal = ref(false)
 let showDeleteTaskModal = ref(false)
-
+let userIdForAddTask = ref('')
 let subAdmins = ref([{ id: '', username: '', email: '', showTasks: false }])
 onMounted(async () => {
     const resaultUsers = await fetch('http://localhost:3000/showSubAdmin', { headers: { 'Authorization': token! } })
@@ -145,17 +145,17 @@ async function editTask(userId: string, taskId: number, mainIndex: number, taskI
 }
 
 async function addTask(userId: string, mainIndex: number, taskIndex: number) {
-    let tasks = allTasks.value[mainIndex]
+    // let tasks = allTasks.value[mainIndex]
 
 
-    await fetch('http://localhost:3000/AdminOrSubAdmin/' + userId + '/task', {
-        headers: {
-            "Content-Type": "application/json",
-            'Authorization': token!
-        },
-        method: "POST",
-        body: JSON.stringify({ title: tasks[taskIndex].title, desc: tasks[taskIndex].desc })
-    })
+    // await fetch('http://localhost:3000/AdminOrSubAdmin/' + userId + '/task', {
+    //     headers: {
+    //         "Content-Type": "application/json",
+    //         'Authorization': token!
+    //     },
+    //     method: "POST",
+    //     body: JSON.stringify({ title: tasks[taskIndex].title, desc: tasks[taskIndex].desc })
+    // })
 }
 
 function editMessage(title : string , desc : string , taskId : number , userId : string ) {
@@ -171,8 +171,12 @@ function callGetTasks(subAdminId: string, index: number) {
     getTasks(subAdminId, index);
 }
 
-function closeModal() {
+function closeModal(userId : string) {
     showAddTaskModal.value = !showAddTaskModal.value
+    userIdForAddTask.value = userId
+    for (let index = 0; index < subAdmins.value.length; index++) {
+        getTasks(subAdmins.value[index].id , index)
+    } 
 }
 
 function closeTaskModal() {

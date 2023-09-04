@@ -1,14 +1,27 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { Autenticate } from "../stores/counter";
+import FinishModal from '@/components/FinishModal.vue';
 const Autent = Autenticate()
 const token = ref(localStorage.getItem("TOKEN"))
-
-let tasks = ref([{ title: '', desc: '', isfinish: false, more: false }])
+let showFinishModal = ref(false)
+let taskId = ref(0)
+let tasks = ref([{ title: '', desc: '', isfinish: false, more: false , id : 0 }])
 onMounted(async () => {
     const restualt = await fetch('http://localhost:3000/new-users/myNotFinished', { headers: { 'Authorization': token.value! } })
     tasks.value = await restualt.json()
 })
+
+function GetTaskId(taskid:number) {
+    showFinishModal.value = true
+    taskId.value = taskid
+}
+
+async function CloseAndRefech(){
+    showFinishModal.value = false
+    const restualt = await fetch('http://localhost:3000/new-users/myNotFinished', { headers: { 'Authorization': token.value!  } })
+    tasks.value = await restualt.json()
+}
 
 </script>
 
@@ -18,7 +31,7 @@ onMounted(async () => {
             <div class="seeLess">
                 <h1>titiel : {{ task.title }}</h1>
                 <div class="status">
-                    <div style="color: red;" title="this task is  finished  !!">
+                    <div style="color: red; cursor: pointer;" title="this task is  finished  !!" @click="GetTaskId(task.id)">
                         <svg  xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor"
                             class="bi bi-hourglass-split" viewBox="0 0 16 16">
                             <path
@@ -42,6 +55,7 @@ onMounted(async () => {
             </div>
         </div>
     </div>
+    <FinishModal v-if="showFinishModal" @closeFinishModal="CloseAndRefech" :taskId="taskId"/>
 </template>
 
 

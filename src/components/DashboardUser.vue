@@ -66,7 +66,7 @@ const prop = "test4"
         /* margin: 10px; */
         display: grid;
     
-        grid-template-columns: repeat(auto-fit, minmax(256px, 2fr));
+        grid-template-columns: repeat(auto-fit, minmax(360px, 2fr));
         /* grid-gap: 25px; */
         position: relative;
         /* justify-items: center; */

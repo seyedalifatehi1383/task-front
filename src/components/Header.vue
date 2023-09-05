@@ -6,7 +6,6 @@ const Autent = Autenticate()
 const token = ref(localStorage.getItem("TOKEN"))
 const WhoAmI = ref({username : '' , accessLevel : ''})
 import { useRouter } from 'vue-router'
-import { $ } from 'vue/macros';
 const route = useRouter()
 onMounted(async () =>{
     const Who = await fetch('http://localhost:3000/whoAmI', { headers: { 'Authorization': token.value! } })
@@ -24,6 +23,22 @@ function Logout() {
     // window.location.reload()
     route.push('/Login')
 }
+
+async function DeleteAccount() {
+    const resualt =  await fetch('http://localhost:3000/deleteAccount' , {
+        headers : { 'Authorization': token.value! } ,
+        method : "DELETE"
+    })
+
+    if (resualt.status !== 200) {
+        alert('Error ' + resualt.status)
+    } else {
+        localStorage.clear()
+        token.value = localStorage.getItem("TOKEN")
+        route.push('/')
+        location.reload()
+    }
+}
 </script>
 
 <template>
@@ -36,13 +51,15 @@ function Logout() {
         <RouterLink to="/SignUp">
             <button >signup</button>
         </RouterLink>
-
+        
         <RouterLink to="/Login">
             <button >login</button>
         </RouterLink>
+        
     </div>
     <div v-else class="BTNS">
         <button  @click="Logout()">Logout</button>
+        <button style="background-color: red; width: 128px; color: white;" @click="DeleteAccount()">DELETE ACCOUNT</button>
     </div>
 </div>
 

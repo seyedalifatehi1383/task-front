@@ -15,12 +15,15 @@ onMounted(async () =>{
         WhoAmI.value = await Who.json();
         
     }
+    
 })
+
 
 function Logout() {
     localStorage.clear()
     token.value = localStorage.getItem("TOKEN")
     // window.location.reload()
+    Autent.islogin = false
     route.push('/Login')
 }
 
@@ -34,9 +37,10 @@ async function DeleteAccount() {
         alert('Error ' + resualt.status)
     } else {
         localStorage.clear()
-        token.value = localStorage.getItem("TOKEN")
-        route.push('/')
-        location.reload()
+        Autent.islogin = false
+        route.push('/signup')
+        // location.reload()
+        
     }
 }
 </script>
@@ -45,9 +49,10 @@ async function DeleteAccount() {
 <div class="Header">
     <RouterLink to="/" style="text-decoration: none;">
         <h2 >Task Manager</h2>
+        <!-- <h1>{{ Autent.islogin }}</h1> -->
     </RouterLink>
     
-    <div v-if="token == undefined" class="BTNS">
+    <div v-if="token == undefined && Autent.islogin == false" class="BTNS">
         <RouterLink to="/SignUp">
             <button >signup</button>
         </RouterLink>
@@ -59,7 +64,7 @@ async function DeleteAccount() {
     </div>
     <div v-else class="BTNS">
         <button  @click="Logout()">Logout</button>
-        <button style="background-color: red; width: 128px; color: white;" @click="DeleteAccount()">DELETE ACCOUNT</button>
+        <!-- <button style="background-color: red; width: 128px; color: white;" @click="DeleteAccount()">DELETE ACCOUNT</button> -->
     </div>
 </div>
 

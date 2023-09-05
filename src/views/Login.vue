@@ -4,9 +4,10 @@ import { Autenticate } from "../stores/counter";
 import { useRouter } from 'vue-router'
 const route = useRouter()
 const Autent = Autenticate()
-    let password = ref('')
-    let email = ref('')
-    let responsebody : any
+let password = ref('')
+let email = ref('')
+let responsebody : any
+const emit = defineEmits(['logindel'])
     async function login() {
       const response = await fetch('http://localhost:3000/users/login',{headers : {"Content-Type": "application/json" } ,
          method :"POST" ,
@@ -14,8 +15,8 @@ const Autent = Autenticate()
         if (response.status ==200) {
             responsebody = await response.json()
             localStorage.setItem("TOKEN" , 'Bearer '+responsebody.token)
-            route.push('/')
-            
+            Autent.islogin = true
+            route.push('/')            
             
         } else if(response.status ==404){
             const errorMessage = await response.json()            

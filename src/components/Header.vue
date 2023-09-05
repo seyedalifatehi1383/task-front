@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, vModelCheckbox } from 'vue';
 import { Autenticate } from "../stores/counter";
+import Login from '../views/Login.vue'
 const Autent = Autenticate()
 const token = ref(localStorage.getItem("TOKEN"))
 const WhoAmI = ref({username : '' , accessLevel : ''})

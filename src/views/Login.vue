@@ -4,23 +4,22 @@ import { Autenticate } from "../stores/counter";
 import { useRouter } from 'vue-router'
 const route = useRouter()
 const Autent = Autenticate()
-    let username = ref('')
     let password = ref('')
     let email = ref('')
     let responsebody : any
     async function login() {
       const response = await fetch('http://localhost:3000/users/login',{headers : {"Content-Type": "application/json" } ,
          method :"POST" ,
-         body : JSON.stringify({username : username.value , email : email.value , password:password.value }) })
+         body : JSON.stringify({ email : email.value , password:password.value }) })
         if (response.status ==200) {
             responsebody = await response.json()
             localStorage.setItem("TOKEN" , 'Bearer '+responsebody.token)
             route.push('/')
             
             
-            
         } else if(response.status ==404){
-            alert('there is no such user')
+            const errorMessage = await response.json()            
+            alert(errorMessage.error.message)
             
         }
         
@@ -33,7 +32,8 @@ const Autent = Autenticate()
     <div class="backgroand">
         <div class="loginForm">
         <h1>Login</h1>
-        <input type="text" placeholder="username" v-model="username">
+        <br>
+        <br>
         <br>
         <input type="text" placeholder="email" v-model="email">
         <br>
@@ -86,5 +86,6 @@ const Autent = Autenticate()
         height: 32px;
         margin: 40px 10px;
         width: 80%;
+        color: white;
     }
 </style>

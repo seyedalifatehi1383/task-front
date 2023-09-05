@@ -38,8 +38,9 @@
     if (response.status == 200) {
       console.log('successfully signed in!');
       showSignUpModal.value = true; // Set the showModal variable to true to show the modal
+    } else if (response.status == 403) {
+      alert('password cant be less 8 character or email is not valid')
     } else {
-      
       console.log(response);
     }
   }

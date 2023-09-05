@@ -2,14 +2,23 @@
 import { onMounted, ref } from 'vue';
 import { Autenticate } from "../stores/counter";
 import FinishModal from '@/components/FinishModal.vue';
+import DeleteAlertModal from '@/components/DeleteAlertModal.vue';
 const Autent = Autenticate()
 const token = ref(localStorage.getItem("TOKEN"))
 let tasks = ref([{ title: '', desc: '', isfinish: false, more: false , id : 0}])
 let taskId = ref(0)
 let showFinishModal = ref(false)
+let whoAmI = ref({accessLevel : '' , id :''})
+let showDeleteModal = ref(false)
+let Deleteproperty = ref({
+    taskId : 0,
+    userId : ''
+})
 onMounted(async () => {
     const restualt = await fetch('http://localhost:3000/myTasks', { headers: { 'Authorization': token.value!  } })
     tasks.value = await restualt.json()
+    const whoresualt = await fetch('http://localhost:3000/whoAmI', { headers: { 'Authorization': token.value!  } })
+    whoAmI.value =await whoresualt.json()
 })
 
 function GetTaskId(taskid:number) {
@@ -23,6 +32,28 @@ async function CloseAndRefech(){
     tasks.value = await restualt.json()
 }
 
+function setDeleteProperty(taskid : number , userid : string) {
+    showDeleteModal.value = !showDeleteModal.value,
+    Deleteproperty.value.taskId = taskid,
+    Deleteproperty.value.userId = userid
+}
+
+async function DeleteTask() {
+    const resualt = await fetch('http://localhost:3000//Admin/'+Deleteproperty.value.userId+'/task/'+Deleteproperty.value.taskId , {
+        headers: { 'Authorization': token.value! },
+        method : "DELETE",
+    })
+    if (resualt.status !==200) {
+        alert('Error' + resualt.status)
+    } else {
+        CloseAndRefech()
+    }
+    showDeleteModal.value = !showDeleteModal.value
+}
+
+function CloseDeleteModal() {
+    showDeleteModal.value = !showDeleteModal.value
+}
 
 </script>
 
@@ -60,6 +91,13 @@ async function CloseAndRefech(){
                             d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
                     </svg>
                 </div>
+
+                <div style="color: red; margin: 10px; cursor: pointer;" v-if="whoAmI.accessLevel == 'Admin'" @click="setDeleteProperty(task.id , whoAmI.id)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                    </svg>
+                </div>
+
             </div>
             <div class="seeMore">
                 <p v-if="task.more" style="margin: 15px;">Description : {{ task.desc }}</p>
@@ -69,7 +107,7 @@ async function CloseAndRefech(){
     </div>
 
     <FinishModal :taskId="taskId" v-if="showFinishModal" @closeFinishModal="CloseAndRefech"/>
-
+    <DeleteAlertModal v-if="showDeleteModal" @delete-task="DeleteTask()"  @close-delete-modal="CloseDeleteModal()"/>
 </template>
 
 

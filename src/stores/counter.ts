@@ -7,5 +7,6 @@ export const Autenticate = defineStore('counter', () => {
   // async function GetToken()  {
   //   value.value =  localStorage.getItem("TOKEN")!
   // }
-  return {  }
+  let islogin = ref(false)
+  return { islogin }
 })

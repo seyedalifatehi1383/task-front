@@ -106,7 +106,7 @@ function EditMessage(title: string, text: string, group: string, id: number) {
                     {{ Message.group }}
                 </div>
 
-                <div @click="DeleteMessageAdmin(Message.id)" class="deleteMessage" v-if="WhoAmI.accessLevel == 'Admin'">
+                <div style="cursor: pointer;" @click="DeleteMessageAdmin(Message.id)" class="deleteMessage" v-if="WhoAmI.accessLevel == 'Admin'">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-trash-fill" viewBox="0 0 16 16">
                         <path
